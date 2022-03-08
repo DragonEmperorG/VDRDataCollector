@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">VDRDataCollector</string>
+
+    <string name="bottom_navigation_view_menu_collector_name">Collector</string>
+    <string name="collector_module_start_controler_name">Start</string>
+    <string name="collector_module_stop_controler_name">Stop</string>
+
+    <string name="bottom_navigation_view_menu_settings_name">Settings</string>
+
+</resources>

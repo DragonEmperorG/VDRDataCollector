@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/bottom_navigation_menu_item_scanner"
+        android:enabled="true"
+        android:icon="@drawable/icon_location"
+        android:title="@string/bottom_navigation_view_menu_collector_name"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/bottom_navigation_menu_item_settings"
+        android:enabled="true"
+        android:icon="@drawable/icon_setting"
+        android:title="@string/bottom_navigation_view_menu_settings_name"
+        app:showAsAction="ifRoom" />
+</menu>
