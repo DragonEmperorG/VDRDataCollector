@@ -24,17 +24,19 @@
                 android:orientation="horizontal"  >
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/collector_module_button_stop_collect"
+                    android:id="@+id/collector_module_button_close_sensors"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/collector_module_stop_controler_name"
-                    android:enabled="false" />
+                    android:text="@string/collector_module_close_sensors_controler_button_name"
+                    android:enabled="false"
+                    style="@style/Widget.MaterialComponents.Button.TextButton" />
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/collector_module_button_start_collect"
+                    android:id="@+id/collector_module_button_open_sensors"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/collector_module_start_controler_name" />
+                    android:text="@string/collector_module_open_sensors_controler_button_name"
+                    style="@style/Widget.MaterialComponents.Button.TextButton" />
 
             </LinearLayout>
 
@@ -47,7 +49,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_margin="4dp"
                     android:text="@string/bottom_navigation_view_menu_collector_name"
                     android:textSize="24sp" />
             </LinearLayout>
@@ -55,7 +57,151 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/collector_module_controler_submodule" >
+            android:layout_below="@+id/collector_module_controler_submodule"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/collector_module_text_field_log_folder_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_gravity="center_horizontal"
+                    android:hint="@string/collector_module_mission_name_setting_text_field_hint_value">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/collector_module_button_stop_collect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/collector_module_stop_logger_controler_button_name"
+                    android:enabled="false"
+                    app:shapeAppearance="@style/ShapeAppearance.MaterialComponents.MediumComponent"
+                    style="@style/Widget.MaterialComponents.Button.TextButton" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/collector_module_button_start_collect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/collector_module_start_logger_controler_button_name"
+                    android:enabled="false"
+                    style="@style/Widget.MaterialComponents.Button.TextButton" />
+
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/collector_module_motion_sensors_choice_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/collector_module_motion_sensors_choice_chip_name"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/collector_module_position_sensors_choice_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/collector_module_position_sensors_choice_chip_name"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/collector_module_environment_sensors_choice_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/collector_module_environment_sensors_choice_chip_name"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/collector_module_gnss_sensor_choice_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/collector_module_gnss_sensor_choice_chip_name"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/collector_module_alkaid_sensor_choice_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/collector_module_alkaid_sensor_choice_chip_name"/>
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/collector_module_text_field_alkaid_sensor_host_setting"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="3"
+                    android:hint="@string/collector_module_alkaid_sensor_host_setting_text_field_hint_value">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/collector_module_text_field_alkaid_sensor_port_setting"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:hint="@string/collector_module_alkaid_sensor_port_setting_text_field_hint_value">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/collector_module_button_test_alkaid_sensor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/collector_module_test_alkaid_sensor_button_name"
+                style="@style/Widget.MaterialComponents.Button.TextButton" />
+
+
 
         </LinearLayout>
     </RelativeLayout>

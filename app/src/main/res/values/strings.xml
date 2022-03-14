@@ -2,8 +2,25 @@
     <string name="app_name">VDRDataCollector</string>
 
     <string name="bottom_navigation_view_menu_collector_name">Collector</string>
-    <string name="collector_module_start_controler_name">Start</string>
-    <string name="collector_module_stop_controler_name">Stop</string>
+    <string name="collector_module_open_sensors_controler_button_name">Open</string>
+    <string name="collector_module_close_sensors_controler_button_name">Close</string>
+
+    <string name="collector_module_mission_name_setting_text_field_hint_value">Mission Name</string>
+    <string name="collector_module_start_logger_controler_button_name">Start</string>
+    <string name="collector_module_stop_logger_controler_button_name">Stop</string>
+
+    <string name="collector_module_motion_sensors_choice_chip_name">Motion sensors</string>
+    <string name="collector_module_position_sensors_choice_chip_name">Position sensors</string>
+    <string name="collector_module_environment_sensors_choice_chip_name">Environment sensors</string>
+    <string name="collector_module_gnss_sensor_choice_chip_name">GNSS</string>
+    <string name="collector_module_alkaid_sensor_choice_chip_name">Alkaid</string>
+
+    <string name="collector_module_alkaid_sensor_host_setting_text_field_hint_value">Host</string>
+    <string name="collector_module_alkaid_sensor_host_setting_text_field_error_text" translatable="false">Could not connect alkaid sensor</string>
+    <string name="collector_module_alkaid_sensor_port_setting_text_field_hint_value">Port</string>
+    <string name="collector_module_test_alkaid_sensor_button_name">Test</string>
+
+    <string name="cat_textfield_null_input_error_text" translatable="false">Enter a value</string>
 
     <string name="bottom_navigation_view_menu_settings_name">Settings</string>
 

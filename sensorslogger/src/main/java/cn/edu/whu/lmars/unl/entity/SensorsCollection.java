@@ -82,10 +82,14 @@ public class SensorsCollection {
         }
     }
 
+    public void configAlkaidValues(String host, int port) {
+        alkaidSensor.configAlkaidSensor(host, port);
+    }
+
     public String getFormattedVdrSensorsValues() {
         StringBuilder stringBuilder;
         stringBuilder = new StringBuilder();
-        stringBuilder.append("\n").append(System.currentTimeMillis());
+        stringBuilder.append(System.currentTimeMillis());
         stringBuilder.append(", ").append(motionSensors.getCsvFormattedAccelerometerSensorValues());
         stringBuilder.append(", ").append(motionSensors.getCsvFormattedGyroscopeSensorValues());
         stringBuilder.append(", ").append(positionSensors.getCsvFormattedGameRotationVectorSensorValues());
@@ -97,6 +101,8 @@ public class SensorsCollection {
         stringBuilder.append(", ").append(motionSensors.getCsvFormattedLinearAccelerationSensorValues());
         stringBuilder.append(", ").append(environmentSensors.getCsvFormattedPressureSensorValues());
         stringBuilder.append(", ").append(gnssSensor.getCsvFormattedGNSSSensorValues());
+        stringBuilder.append(", ").append(alkaidSensor.getCsvFormattedAlkaidSensorValues());
+        stringBuilder.append("\n");
         return stringBuilder.toString();
     }
 }

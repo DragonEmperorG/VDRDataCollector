@@ -23,8 +23,8 @@ public class DataCollectorFileEngine extends Thread {
 
     private FileOutputStream dataCollectorFileOutputStream = null;
 
-    public DataCollectorFileEngine(Activity mainActivity, SensorsLoggerEngineOption sensorsLoggerEngineOption) {
-        dataCollectorFolderName = sensorsLoggerEngineOption.getLoggerFolderName();
+    public DataCollectorFileEngine(Activity mainActivity, String loggerFolderName) {
+        dataCollectorFolderName = loggerFolderName;
         File dataCollectorFile = getFile(mainActivity, "VdrExperimentData", ".csv");
         try {
             dataCollectorFileOutputStream = new FileOutputStream(dataCollectorFile);

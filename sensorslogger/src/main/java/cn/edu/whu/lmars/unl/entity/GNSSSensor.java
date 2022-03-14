@@ -7,7 +7,7 @@ public class GNSSSensor {
     private long sensorEventUpdateSystemTimestamp = 0L;
     private long sensorEventTimestamp = 0L;
     private Location gnssSensorLocation = new Location("");
-    private String csvFormattedValues = "0.0, 0.0, 0.0";
+    private String csvFormattedValues = "0.0, 0.0, 0.0, 0.0";
 
     public GNSSSensor() {
     }

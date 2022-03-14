@@ -4,29 +4,13 @@ import java.util.ArrayList;
 
 public class SensorsLoggerEngineOption {
 
-    private boolean fileLoggerSwitcher = true;
-
-    private String loggerFolderName;
-
     private ArrayList<Integer> logSensorsTypeList;
 
+    private String alkaidSensorHost;
+
+    private int alkaidSensorPort;
+
     public SensorsLoggerEngineOption() {
-    }
-
-    public boolean getFileLoggerSwitcher() {
-        return fileLoggerSwitcher;
-    }
-
-    public void setFileLoggerSwitcher(boolean fileLoggerSwitcher) {
-        this.fileLoggerSwitcher = fileLoggerSwitcher;
-    }
-
-    public String getLoggerFolderName() {
-        return loggerFolderName;
-    }
-
-    public void setLoggerFolderName(String loggerFolderName) {
-        this.loggerFolderName = loggerFolderName;
     }
 
     public ArrayList<Integer> getLogSensorsTypeList() {
@@ -35,5 +19,21 @@ public class SensorsLoggerEngineOption {
 
     public void setLogSensorsTypeList(ArrayList<Integer> logSensorsTypeList) {
         this.logSensorsTypeList = logSensorsTypeList;
+    }
+
+    public String getAlkaidSensorHost() {
+        return alkaidSensorHost;
+    }
+
+    public void setAlkaidSensorHost(String alkaidSensorHost) {
+        this.alkaidSensorHost = alkaidSensorHost;
+    }
+
+    public int getAlkaidSensorPort() {
+        return alkaidSensorPort;
+    }
+
+    public void setAlkaidSensorPort(int alkaidSensorPort) {
+        this.alkaidSensorPort = alkaidSensorPort;
     }
 }
