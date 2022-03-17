@@ -8,6 +8,10 @@ public class AlkaidSensorPositionProto {
     private double height = 0.0;
     private double azimuth = 0.0;
     private double speed = 0.0;
+    private double age = 0.0;
+    private int satsnum = 0;
+
+
 
     public int getStatus() {
         return status;
@@ -63,5 +67,21 @@ public class AlkaidSensorPositionProto {
 
     public void setSpeed(double speed) {
         this.speed = speed;
+    }
+
+    public double getAge() {
+        return age;
+    }
+
+    public void setAge(double age) {
+        this.age = age;
+    }
+
+    public int getSatsnum() {
+        return satsnum;
+    }
+
+    public void setSatsnum(int satsnum) {
+        this.satsnum = satsnum;
     }
 }

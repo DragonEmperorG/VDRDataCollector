@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
     private TextInputLayout collectorModuleTextInputLayoutLogFolderName;
     private EditText collectorModuleLogFolderNameEditText;
 
-    private String alkaidSensorHostSetting = "139.196.6.110";
-    private int alkaidSensorPortSetting = 34300;
+    private String alkaidSensorHostSetting = "192.168.2.20";
+    private int alkaidSensorPortSetting = 4300;
     private TextInputLayout collectorModuleTextInputLayoutAlkaidSensorHostSetting;
     private EditText collectorModuleAlkaidSensorHostSettingEditText;
     private TextInputLayout collectorModuleTextInputLayoutAlkaidSensorPortSetting;
@@ -187,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         collectorModuleButtonOpenSensors.setOnClickListener(view -> {
             SensorsLoggerEngineOption sensorsLoggerEngineOption = new SensorsLoggerEngineOption();
             ArrayList<Integer> logSensorsTypeList = getSelectedLogSensorsTypeList();
+            logSensorsTypeList.add(2022);
             sensorsLoggerEngineOption.setLogSensorsTypeList(logSensorsTypeList);
             if (logSensorsTypeList.contains(SensorsLoggerEngine.SENSOR_TYPE_ALKAID)) {
                 sensorsLoggerEngineOption.setAlkaidSensorHost(alkaidSensorHostSetting);
@@ -231,6 +232,8 @@ public class MainActivity extends AppCompatActivity {
         collectorModuleButtonTestAlkaidSensor = findViewById(R.id.collector_module_button_test_alkaid_sensor);
         collectorModuleButtonTestAlkaidSensor.setOnClickListener(view -> {
             AlkaidSensorPositionProto testAlkaidSensorPositionProto = null;
+            alkaidSensorHostSetting = String.valueOf(collectorModuleAlkaidSensorHostSettingEditText.getText());
+            alkaidSensorPortSetting = Integer.parseInt(String.valueOf(collectorModuleAlkaidSensorPortSettingEditText.getText()));
             try {
                 testAlkaidSensorPositionProto = AlkaidSensor.testAlkaidSensor(alkaidSensorHostSetting, alkaidSensorPortSetting);
                 if (testAlkaidSensorPositionProto.getStatus() != -1) {

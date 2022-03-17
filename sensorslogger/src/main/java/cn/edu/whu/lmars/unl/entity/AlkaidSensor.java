@@ -37,8 +37,8 @@ public class AlkaidSensor {
     public AlkaidSensor() {
         ALKAID_SENSOR_INTERFACE_URL = new HttpUrl.Builder()
                 .scheme(ALKAID_SENSOR_INTERFACE_URL_SCHEME)
-                .host("139.196.6.110")
-                .port(34300)
+                .host("192.168.2.20")
+                .port(4300)
                 .addPathSegment("position")
                 .build();
         ALKAID_SENSOR_INTERFACE_REQUEST = new Request.Builder()
@@ -116,7 +116,8 @@ public class AlkaidSensor {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
             try (ResponseBody responseBody = response.body()) {
                 String responseBodyString = responseBody.string();
-                rAlkaidSensorPositionProto = JSON.parseObject(responseBodyString, AlkaidSensorPositionProto.class);
+                Log.d(TAG, "testAlkaidSensor: " + responseBodyString);
+//                rAlkaidSensorPositionProto = JSON.parseObject(responseBodyString, AlkaidSensorPositionProto.class);
                 return rAlkaidSensorPositionProto;
             }
         }
