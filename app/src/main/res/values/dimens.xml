@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="sensor_card_rich_media_demo_min_height">148dp</dimen>
+    <dimen name="sensor_card_half_spacing">8dp</dimen>
+    <dimen name="sensor_card_single_spacing">8dp</dimen>
+    <dimen name="sensor_card_double_spacing">16dp</dimen>
+    <dimen name="sensor_card_triple_spacing">24dp</dimen>
+    <dimen name="sensor_card_content_padding">16dp</dimen>
+
+</resources>

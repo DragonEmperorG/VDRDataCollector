@@ -9,11 +9,42 @@
     <string name="collector_module_start_logger_controler_button_name">Start</string>
     <string name="collector_module_stop_logger_controler_button_name">Stop</string>
 
-    <string name="collector_module_motion_sensors_choice_chip_name">Motion sensors</string>
+    <string name="collector_module_motion_sensors_choice_chip_name">Motion Sensors</string>
+    <string name="collector_module_motion_sensors_card_title_name">Motion Sensors</string>
+
+    <string name="collector_module_motion_sensors_card_accelerometer_sensor_subtitle_name">Accelerometer Sensor</string>
+    <string name="collector_module_motion_sensors_card_accelerometer_sensor_timestamp_label_name">Sensor Event Timestamp:&#160;</string>
+    <string name="collector_module_motion_sensors_card_accelerometer_sensor_acceleration_x_label_name">Acceleration X:&#160;</string>
+    <string name="collector_module_motion_sensors_card_accelerometer_sensor_acceleration_y_label_name">Acceleration Y:&#160;</string>
+    <string name="collector_module_motion_sensors_card_accelerometer_sensor_acceleration_z_label_name">Acceleration Z:&#160;</string>
+
     <string name="collector_module_position_sensors_choice_chip_name">Position sensors</string>
+
+    <string name="collector_module_position_sensors_card_magnetic_sensor_subtitle_name">Magnetic Sensor</string>
+    <string name="collector_module_position_sensors_card_magnetic_sensor_timestamp_label_name">Sensor Event Timestamp:&#160;</string>
+    <string name="collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_x_label_name">Strength X:&#160;</string>
+    <string name="collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_y_label_name">Strength Y:&#160;</string>
+    <string name="collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_z_label_name">Strength Z:&#160;</string>
+
     <string name="collector_module_environment_sensors_choice_chip_name">Environment sensors</string>
+
+    <string name="collector_module_motion_sensors_card_pressure_sensor_subtitle_name">Pressure Sensor</string>
+    <string name="collector_module_motion_sensors_card_pressure_sensor_timestamp_label_name">Sensor Event Timestamp:&#160;</string>
+    <string name="collector_module_motion_sensors_card_pressure_sensor_pressure_label_name">Pressure:&#160;</string>
+
     <string name="collector_module_gnss_sensor_choice_chip_name">GNSS</string>
+    <string name="collector_module_gnss_sensor_card_title_name">GNSS Sensor</string>
+    <string name="collector_module_gnss_sensor_card_location_time_label_name">Time: </string>
+    <string name="collector_module_gnss_sensor_card_location_longitude_label_name">Longitude: </string>
+    <string name="collector_module_gnss_sensor_card_location_latitude_label_name">Latitude: </string>
+    <string name="collector_module_gnss_sensor_card_location_accuracy_label_name">Accuracy: </string>
+
     <string name="collector_module_alkaid_sensor_choice_chip_name">Alkaid</string>
+    <string name="collector_module_alkaid_sensor_card_title_name">Alkaid Sensor</string>
+    <string name="collector_module_alkaid_sensor_card_accelerometer_sensor_timestamp_label_name">Sensor Event Timestamp: </string>
+    <string name="collector_module_alkaid_sensor_card_accelerometer_sensor_acceleration_x_label_name">Acceleration X: </string>
+    <string name="collector_module_alkaid_sensor_card_accelerometer_sensor_acceleration_y_label_name">Acceleration Y: </string>
+    <string name="collector_module_alkaid_sensor_card_accelerometer_sensor_acceleration_z_label_name">Acceleration Z: </string>
 
     <string name="collector_module_alkaid_sensor_host_setting_text_field_hint_value">Host</string>
     <string name="collector_module_alkaid_sensor_host_setting_text_field_error_text" translatable="false">Could not connect alkaid sensor</string>

@@ -7,24 +7,33 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
+import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.chip.Chip;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textview.MaterialTextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
+import cn.edu.whu.lmars.unl.entity.AccelerometerSensor;
 import cn.edu.whu.lmars.unl.entity.AlkaidSensor;
 import cn.edu.whu.lmars.unl.entity.AlkaidSensorPositionProto;
+import cn.edu.whu.lmars.unl.entity.EnvironmentSensors;
+import cn.edu.whu.lmars.unl.entity.GnssSensor;
+import cn.edu.whu.lmars.unl.entity.MagneticFieldSensor;
+import cn.edu.whu.lmars.unl.entity.MotionSensors;
+import cn.edu.whu.lmars.unl.entity.PositionSensors;
+import cn.edu.whu.lmars.unl.entity.PressureSensor;
+import cn.edu.whu.lmars.unl.entity.SensorsCollection;
+import cn.edu.whu.lmars.unl.listener.SensorsCollectionListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,21 +48,44 @@ public class MainActivity extends AppCompatActivity {
     private MaterialButton collectorModuleButtonStopCollect;
     private MaterialButton collectorModuleButtonTestAlkaidSensor;
 
-    private boolean collectorModuleChipMotionSensorsChoiceCheckedValue;
-    private boolean collectorModuleChipPositionSensorsChoiceCheckedValue;
-    private boolean collectorModuleChipEnvironmentSensorsChoiceCheckedValue;
-    private boolean collectorModuleChipGnssSensorsChoiceCheckedValue;
-    private boolean collectorModuleChipAlkaidSensorsChoiceCheckedValue;
-    private Chip collectorModuleChipMotionSensorsChoice;
-    private Chip collectorModuleChipPositionSensorsChoice;
-    private Chip collectorModuleChipEnvironmentSensorsChoice;
-    private Chip collectorModuleChipGnssSensorsChoice;
-    private Chip collectorModuleChipAlkaidSensorsChoice;
 
     private String logFolderName = "";
     private TextInputLayout collectorModuleTextInputLayoutLogFolderName;
     private EditText collectorModuleLogFolderNameEditText;
 
+
+    private boolean collectorModuleMotionSensorsCardCheckedValue;
+    private MaterialCardView collectorModuleMotionSensorsCardView;
+    private MaterialTextView accelerometerSensorTimestampTextView;
+    private MaterialTextView accelerometerSensorAccelerationXTextView;
+    private MaterialTextView accelerometerSensorAccelerationYTextView;
+    private MaterialTextView accelerometerSensorAccelerationZTextView;
+
+
+    private boolean collectorModulePositionSensorsCardCheckedValue;
+    private MaterialCardView collectorModulePositionSensorsCardView;
+    private MaterialTextView magneticSensorTimestampTextView;
+    private MaterialTextView magneticSensorGeomagneticFieldStrengthXTextView;
+    private MaterialTextView magneticSensorGeomagneticFieldStrengthYTextView;
+    private MaterialTextView magneticSensorGeomagneticFieldStrengthZTextView;
+
+
+    private boolean collectorModuleEnvironmentSensorsCardCheckedValue;
+    private MaterialCardView collectorModuleEnvironmentSensorsCardView;
+    private MaterialTextView pressureSensorTimestampTextView;
+    private MaterialTextView pressureSensorGeomagneticFieldStrengthXTextView;
+
+
+    private boolean collectorModuleGnssSensorsCardCheckedValue;
+    private MaterialCardView collectorModuleGnssSensorsCardView;
+    private MaterialTextView gnssSensorTimeTextView;
+    private MaterialTextView gnssSensorLongitudeTextView;
+    private MaterialTextView gnssSensorLatitudeTextView;
+    private MaterialTextView gnssSensorAccuracyTextView;
+
+
+    private boolean collectorModuleAlkaidSensorsCardCheckedValue;
+    private MaterialCardView collectorModuleAlkaidSensorsCardView;
     private String alkaidSensorHostSetting = "192.168.2.20";
     private int alkaidSensorPortSetting = 4300;
     private TextInputLayout collectorModuleTextInputLayoutAlkaidSensorHostSetting;
@@ -135,10 +167,57 @@ public class MainActivity extends AppCompatActivity {
         collectorModuleButtonStopCollect.setBackground(DISABLE_MATERIAL_BUTTON_BACKGROUND);
     }
 
+    void updateAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                accelerometerSensorTimestampTextView.setText(String.valueOf(accelerometerSensor.sensorEventTimestamp));
+                accelerometerSensorAccelerationXTextView.setText(String.valueOf(accelerometerSensor.values[0]));
+                accelerometerSensorAccelerationYTextView.setText(String.valueOf(accelerometerSensor.values[1]));
+                accelerometerSensorAccelerationZTextView.setText(String.valueOf(accelerometerSensor.values[2]));
+            }
+        });
+    }
+
+    void updateMagneticSensor(MagneticFieldSensor magneticFieldSensor) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                magneticSensorTimestampTextView.setText(String.valueOf(magneticFieldSensor.sensorEventTimestamp));
+                magneticSensorGeomagneticFieldStrengthXTextView.setText(String.valueOf(magneticFieldSensor.values[0]));
+                magneticSensorGeomagneticFieldStrengthYTextView.setText(String.valueOf(magneticFieldSensor.values[1]));
+                magneticSensorGeomagneticFieldStrengthZTextView.setText(String.valueOf(magneticFieldSensor.values[2]));
+            }
+        });
+    }
+
+    void updatePressureSensor(PressureSensor pressureSensor) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                pressureSensorTimestampTextView.setText(String.valueOf(pressureSensor.sensorEventTimestamp));
+                pressureSensorGeomagneticFieldStrengthXTextView.setText(String.valueOf(pressureSensor.values[0]));
+            }
+        });
+    }
+
+    void updateGnssSensor(GnssSensor gnssSensor) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Location location = gnssSensor.getGnssSensorLocation();
+                gnssSensorTimeTextView.setText(String.valueOf(location.getTime()));
+                gnssSensorLongitudeTextView.setText(String.valueOf(location.getLongitude()));
+                gnssSensorLatitudeTextView.setText(String.valueOf(location.getLatitude()));
+                gnssSensorAccuracyTextView.setText(String.valueOf(location.getAccuracy()));
+            }
+        });
+    }
+
     private ArrayList<Integer> getSelectedLogSensorsTypeList() {
         ArrayList<Integer> selectedLogSensorsTypeList = new ArrayList<>();
 
-        if (collectorModuleChipMotionSensorsChoiceCheckedValue) {
+        if (collectorModuleMotionSensorsCardCheckedValue) {
             selectedLogSensorsTypeList.add(Sensor.TYPE_ACCELEROMETER);
             selectedLogSensorsTypeList.add(Sensor.TYPE_GRAVITY);
             selectedLogSensorsTypeList.add(Sensor.TYPE_GYROSCOPE);
@@ -147,21 +226,21 @@ public class MainActivity extends AppCompatActivity {
             selectedLogSensorsTypeList.add(Sensor.TYPE_ROTATION_VECTOR);
         }
 
-        if (collectorModuleChipPositionSensorsChoiceCheckedValue) {
+        if (collectorModulePositionSensorsCardCheckedValue) {
             selectedLogSensorsTypeList.add(Sensor.TYPE_GAME_ROTATION_VECTOR);
             selectedLogSensorsTypeList.add(Sensor.TYPE_MAGNETIC_FIELD);
             selectedLogSensorsTypeList.add(Sensor.TYPE_ORIENTATION);
         }
 
-        if (collectorModuleChipEnvironmentSensorsChoiceCheckedValue) {
+        if (collectorModuleEnvironmentSensorsCardCheckedValue) {
             selectedLogSensorsTypeList.add(Sensor.TYPE_PRESSURE);
         }
 
-        if (collectorModuleChipGnssSensorsChoiceCheckedValue) {
+        if (collectorModuleGnssSensorsCardCheckedValue) {
             selectedLogSensorsTypeList.add(SensorsLoggerEngine.SENSOR_TYPE_GNSS);
         }
 
-        if (collectorModuleChipAlkaidSensorsChoiceCheckedValue) {
+        if (collectorModuleAlkaidSensorsCardCheckedValue) {
             selectedLogSensorsTypeList.add(SensorsLoggerEngine.SENSOR_TYPE_ALKAID);
         }
 
@@ -187,13 +266,39 @@ public class MainActivity extends AppCompatActivity {
         collectorModuleButtonOpenSensors.setOnClickListener(view -> {
             SensorsLoggerEngineOption sensorsLoggerEngineOption = new SensorsLoggerEngineOption();
             ArrayList<Integer> logSensorsTypeList = getSelectedLogSensorsTypeList();
-            logSensorsTypeList.add(2022);
+//            logSensorsTypeList.add(2022);
             sensorsLoggerEngineOption.setLogSensorsTypeList(logSensorsTypeList);
-            if (logSensorsTypeList.contains(SensorsLoggerEngine.SENSOR_TYPE_ALKAID)) {
-                sensorsLoggerEngineOption.setAlkaidSensorHost(alkaidSensorHostSetting);
-                sensorsLoggerEngineOption.setAlkaidSensorPort(alkaidSensorPortSetting);
-            }
+//            if (logSensorsTypeList.contains(SensorsLoggerEngine.SENSOR_TYPE_ALKAID)) {
+//                sensorsLoggerEngineOption.setAlkaidSensorHost(alkaidSensorHostSetting);
+//                sensorsLoggerEngineOption.setAlkaidSensorPort(alkaidSensorPortSetting);
+//            }
             sensorsLoggerEngine = new SensorsLoggerEngine(MainActivity.this);
+            sensorsLoggerEngine.registerSensorsCollectionListener(new SensorsCollectionListener() {
+                @Override
+                public void onSensorsCollectionUpdated(SensorsCollection sensorsCollection) {
+                    if (collectorModuleMotionSensorsCardCheckedValue) {
+                        MotionSensors motionSensors = sensorsCollection.getMotionSensors();
+                        AccelerometerSensor accelerometerSensor = motionSensors.getAccelerometerSensor();
+                        updateAccelerometerSensor(accelerometerSensor);
+                    }
+
+                    if (collectorModulePositionSensorsCardCheckedValue) {
+                        PositionSensors positionSensors = sensorsCollection.getPositionSensors();
+                        MagneticFieldSensor magneticFieldSensor = positionSensors.getMagneticFieldSensor();
+                        updateMagneticSensor(magneticFieldSensor);
+                    }
+                    if (collectorModuleEnvironmentSensorsCardCheckedValue) {
+                        EnvironmentSensors environmentSensors = sensorsCollection.getEnvironmentSensors();
+                        PressureSensor pressureSensor = environmentSensors.getPressureSensor();
+                        updatePressureSensor(pressureSensor);
+                    }
+
+                    if (collectorModuleGnssSensorsCardCheckedValue) {
+                        GnssSensor gnssSensor = sensorsCollection.getGnssSensor();
+                        updateGnssSensor(gnssSensor);
+                    }
+                }
+            });
             sensorsLoggerEngine.openSensors(sensorsLoggerEngineOption);
 
             disableCollectorModuleButtonOpenSensors();
@@ -239,12 +344,12 @@ public class MainActivity extends AppCompatActivity {
                 if (testAlkaidSensorPositionProto.getStatus() != -1) {
                     alkaidSensorHostSetting = String.valueOf(collectorModuleAlkaidSensorHostSettingEditText.getText());
                     alkaidSensorPortSetting = Integer.parseInt(String.valueOf(collectorModuleAlkaidSensorPortSettingEditText.getText()));
-                    collectorModuleChipAlkaidSensorsChoice.setCheckable(true);
+                    collectorModuleAlkaidSensorsCardView.setCheckable(true);
                 }
             } catch (Exception e) {
                 collectorModuleTextInputLayoutAlkaidSensorHostSetting.setError(getResources().getString(R.string.collector_module_alkaid_sensor_host_setting_text_field_error_text));
-                collectorModuleChipAlkaidSensorsChoice.setChecked(false);
-                collectorModuleChipAlkaidSensorsChoice.setCheckable(false);
+                collectorModuleAlkaidSensorsCardView.setChecked(false);
+                collectorModuleAlkaidSensorsCardView.setCheckable(false);
                 e.printStackTrace();
             }
         });
@@ -252,60 +357,86 @@ public class MainActivity extends AppCompatActivity {
         ENABLE_MATERIAL_BUTTON_BACKGROUND = collectorModuleButtonOpenSensors.getBackground();
         DISABLE_MATERIAL_BUTTON_BACKGROUND = collectorModuleButtonCloseSensors.getBackground();
 
-        collectorModuleChipMotionSensorsChoice = findViewById(R.id.collector_module_motion_sensors_choice_chip);
-        collectorModuleChipMotionSensorsChoice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        collectorModuleMotionSensorsCardView = findViewById(R.id.collector_module_motion_sensors_card);
+        collectorModuleMotionSensorsCardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                collectorModuleChipMotionSensorsChoiceCheckedValue = b;
+            public boolean onLongClick(View view) {
+                collectorModuleMotionSensorsCardCheckedValue = !collectorModuleMotionSensorsCardView.isChecked();
+                collectorModuleMotionSensorsCardView.setChecked(collectorModuleMotionSensorsCardCheckedValue);
+                return true;
             }
         });
-        collectorModuleChipMotionSensorsChoiceCheckedValue = true;
-        collectorModuleChipMotionSensorsChoice.setChecked(true);
-        collectorModuleChipMotionSensorsChoice.setCheckable(false);
+        collectorModuleMotionSensorsCardCheckedValue = true;
+        collectorModuleMotionSensorsCardView.setChecked(true);
+        collectorModuleMotionSensorsCardView.setCheckable(false);
+        accelerometerSensorTimestampTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_timestamp_value);
+        accelerometerSensorAccelerationXTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_x_value);
+        accelerometerSensorAccelerationYTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_y_value);
+        accelerometerSensorAccelerationZTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_z_value);
 
-        collectorModuleChipPositionSensorsChoice = findViewById(R.id.collector_module_position_sensors_choice_chip);
-        collectorModuleChipPositionSensorsChoice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        collectorModulePositionSensorsCardView = findViewById(R.id.collector_module_position_sensors_card);
+        collectorModulePositionSensorsCardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                collectorModuleChipPositionSensorsChoiceCheckedValue = b;
+            public boolean onLongClick(View view) {
+                collectorModulePositionSensorsCardCheckedValue = !collectorModulePositionSensorsCardView.isChecked();
+                collectorModuleMotionSensorsCardView.setChecked(collectorModulePositionSensorsCardCheckedValue);
+                return true;
             }
         });
-        collectorModuleChipPositionSensorsChoiceCheckedValue = true;
-        collectorModuleChipPositionSensorsChoice.setChecked(true);
-        collectorModuleChipPositionSensorsChoice.setCheckable(false);
+        collectorModulePositionSensorsCardCheckedValue = true;
+        collectorModulePositionSensorsCardView.setChecked(true);
+        collectorModulePositionSensorsCardView.setCheckable(false);
+        magneticSensorTimestampTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_timestamp_value);
+        magneticSensorGeomagneticFieldStrengthXTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_x_value);
+        magneticSensorGeomagneticFieldStrengthYTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_y_value);
+        magneticSensorGeomagneticFieldStrengthZTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_z_value);
 
-        collectorModuleChipEnvironmentSensorsChoice = findViewById(R.id.collector_module_environment_sensors_choice_chip);
-        collectorModuleChipEnvironmentSensorsChoice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        collectorModuleEnvironmentSensorsCardView = findViewById(R.id.collector_module_environment_sensors_card);
+        collectorModuleEnvironmentSensorsCardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                collectorModuleChipEnvironmentSensorsChoiceCheckedValue = b;
+            public boolean onLongClick(View view) {
+                collectorModuleEnvironmentSensorsCardCheckedValue = !collectorModuleEnvironmentSensorsCardView.isChecked();
+                collectorModuleMotionSensorsCardView.setChecked(collectorModuleEnvironmentSensorsCardCheckedValue);
+                return true;
             }
         });
-        collectorModuleChipEnvironmentSensorsChoiceCheckedValue = true;
-        collectorModuleChipEnvironmentSensorsChoice.setChecked(true);
-        collectorModuleChipEnvironmentSensorsChoice.setCheckable(false);
+        collectorModuleEnvironmentSensorsCardCheckedValue = true;
+        collectorModuleEnvironmentSensorsCardView.setChecked(true);
+        collectorModuleEnvironmentSensorsCardView.setCheckable(false);
+        pressureSensorTimestampTextView = findViewById(R.id.collector_module_motion_sensors_card_pressure_sensor_timestamp_value);
+        pressureSensorGeomagneticFieldStrengthXTextView = findViewById(R.id.collector_module_motion_sensors_card_pressure_sensor_pressure_value);
 
-        collectorModuleChipGnssSensorsChoice = findViewById(R.id.collector_module_gnss_sensor_choice_chip);
-        collectorModuleChipGnssSensorsChoice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                collectorModuleChipGnssSensorsChoiceCheckedValue = b;
-            }
-        });
-        collectorModuleChipGnssSensorsChoiceCheckedValue = true;
-        collectorModuleChipGnssSensorsChoice.setChecked(true);
-        collectorModuleChipGnssSensorsChoice.setCheckable(false);
 
-        collectorModuleChipAlkaidSensorsChoice = findViewById(R.id.collector_module_alkaid_sensor_choice_chip);
-        collectorModuleChipAlkaidSensorsChoice.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        collectorModuleGnssSensorsCardView = findViewById(R.id.collector_module_gnss_sensors_card);
+        collectorModuleGnssSensorsCardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                collectorModuleChipAlkaidSensorsChoiceCheckedValue = b;
+            public boolean onLongClick(View view) {
+                collectorModuleGnssSensorsCardCheckedValue = !collectorModuleGnssSensorsCardView.isChecked();
+                collectorModuleGnssSensorsCardView.setChecked(collectorModuleGnssSensorsCardCheckedValue);
+                return true;
             }
         });
-        collectorModuleChipAlkaidSensorsChoiceCheckedValue = false;
-        collectorModuleChipAlkaidSensorsChoice.setChecked(false);
-        collectorModuleChipAlkaidSensorsChoice.setCheckable(false);
+        collectorModuleGnssSensorsCardCheckedValue = true;
+        collectorModuleGnssSensorsCardView.setChecked(true);
+        collectorModuleGnssSensorsCardView.setCheckable(false);
+        gnssSensorTimeTextView = findViewById(R.id.collector_module_gnss_sensor_card_location_time_value);
+        gnssSensorLongitudeTextView = findViewById(R.id.collector_module_gnss_sensor_card_location_longitude_value);
+        gnssSensorLatitudeTextView = findViewById(R.id.collector_module_gnss_sensor_card_location_latitude_value);
+        gnssSensorAccuracyTextView = findViewById(R.id.collector_module_gnss_sensor_card_location_accuracy_value);
+
+
+        collectorModuleAlkaidSensorsCardView = findViewById(R.id.collector_module_alkaid_sensors_card);
+        collectorModuleAlkaidSensorsCardView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                collectorModuleAlkaidSensorsCardCheckedValue = !collectorModuleAlkaidSensorsCardView.isChecked();
+                collectorModuleAlkaidSensorsCardView.setChecked(collectorModuleAlkaidSensorsCardCheckedValue);
+                return true;
+            }
+        });
+        collectorModuleAlkaidSensorsCardCheckedValue = false;
+        collectorModuleAlkaidSensorsCardView.setChecked(false);
+        collectorModuleAlkaidSensorsCardView.setCheckable(false);
 
         collectorModuleTextInputLayoutLogFolderName = findViewById(R.id.collector_module_text_field_log_folder_name);
         collectorModuleLogFolderNameEditText = collectorModuleTextInputLayoutLogFolderName.getEditText();

@@ -11,7 +11,8 @@ public class AlkaidSensorPositionProto {
     private double age = 0.0;
     private int satsnum = 0;
 
-
+    public AlkaidSensorPositionProto() {
+    }
 
     public int getStatus() {
         return status;

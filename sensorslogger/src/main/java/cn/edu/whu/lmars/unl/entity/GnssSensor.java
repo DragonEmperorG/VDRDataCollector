@@ -3,13 +3,21 @@ package cn.edu.whu.lmars.unl.entity;
 import android.hardware.SensorEvent;
 import android.location.Location;
 
-public class GNSSSensor {
+public class GnssSensor {
     private long sensorEventUpdateSystemTimestamp = 0L;
     private long sensorEventTimestamp = 0L;
     private Location gnssSensorLocation = new Location("");
     private String csvFormattedValues = "0.0, 0.0, 0.0, 0.0";
 
-    public GNSSSensor() {
+    public GnssSensor() {
+    }
+
+    public Location getGnssSensorLocation() {
+        return gnssSensorLocation;
+    }
+
+    public void setGnssSensorLocation(Location gnssSensorLocation) {
+        this.gnssSensorLocation = gnssSensorLocation;
     }
 
     public void updateGNSSSensor(Location location) {

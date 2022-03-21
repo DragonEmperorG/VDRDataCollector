@@ -3,22 +3,61 @@ package cn.edu.whu.lmars.unl.entity;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.location.Location;
-import android.util.Log;
 
 public class SensorsCollection {
     private static final String TAG = "SensorsCollection";
     private MotionSensors motionSensors;
     private PositionSensors positionSensors;
     private EnvironmentSensors environmentSensors;
-    private GNSSSensor gnssSensor;
+    private GnssSensor gnssSensor;
     private AlkaidSensor alkaidSensor;
 
     public SensorsCollection() {
         motionSensors = new MotionSensors();
         positionSensors = new PositionSensors();
         environmentSensors = new EnvironmentSensors();
-        gnssSensor = new GNSSSensor();
+        gnssSensor = new GnssSensor();
         alkaidSensor = new AlkaidSensor();
+    }
+
+    public MotionSensors getMotionSensors() {
+        return motionSensors;
+    }
+
+    public void setMotionSensors(MotionSensors motionSensors) {
+        this.motionSensors = motionSensors;
+    }
+
+    public PositionSensors getPositionSensors() {
+        return positionSensors;
+    }
+
+    public void setPositionSensors(PositionSensors positionSensors) {
+        this.positionSensors = positionSensors;
+    }
+
+    public EnvironmentSensors getEnvironmentSensors() {
+        return environmentSensors;
+    }
+
+    public void setEnvironmentSensors(EnvironmentSensors environmentSensors) {
+        this.environmentSensors = environmentSensors;
+    }
+
+    public GnssSensor getGnssSensor() {
+        return gnssSensor;
+    }
+
+    public void setGnssSensor(GnssSensor gnssSensor) {
+        this.gnssSensor = gnssSensor;
+    }
+
+    public AlkaidSensor getAlkaidSensor() {
+        return alkaidSensor;
+    }
+
+    public void setAlkaidSensor(AlkaidSensor alkaidSensor) {
+        this.alkaidSensor = alkaidSensor;
     }
 
     public void updateSensorsValues(SensorEvent sensorEvent) {
