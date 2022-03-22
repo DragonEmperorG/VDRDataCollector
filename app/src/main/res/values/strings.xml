@@ -34,17 +34,22 @@
 
     <string name="collector_module_gnss_sensor_choice_chip_name">GNSS</string>
     <string name="collector_module_gnss_sensor_card_title_name">GNSS Sensor</string>
-    <string name="collector_module_gnss_sensor_card_location_time_label_name">Time: </string>
-    <string name="collector_module_gnss_sensor_card_location_longitude_label_name">Longitude: </string>
-    <string name="collector_module_gnss_sensor_card_location_latitude_label_name">Latitude: </string>
-    <string name="collector_module_gnss_sensor_card_location_accuracy_label_name">Accuracy: </string>
+    <string name="collector_module_gnss_sensor_card_location_time_label_name">Time:&#160;</string>
+    <string name="collector_module_gnss_sensor_card_location_longitude_label_name">Longitude:&#160;</string>
+    <string name="collector_module_gnss_sensor_card_location_latitude_label_name">Latitude:&#160;</string>
+    <string name="collector_module_gnss_sensor_card_location_accuracy_label_name">Accuracy:&#160;</string>
 
     <string name="collector_module_alkaid_sensor_choice_chip_name">Alkaid</string>
     <string name="collector_module_alkaid_sensor_card_title_name">Alkaid Sensor</string>
-    <string name="collector_module_alkaid_sensor_card_accelerometer_sensor_timestamp_label_name">Sensor Event Timestamp: </string>
-    <string name="collector_module_alkaid_sensor_card_accelerometer_sensor_acceleration_x_label_name">Acceleration X: </string>
-    <string name="collector_module_alkaid_sensor_card_accelerometer_sensor_acceleration_y_label_name">Acceleration Y: </string>
-    <string name="collector_module_alkaid_sensor_card_accelerometer_sensor_acceleration_z_label_name">Acceleration Z: </string>
+    <string name="collector_module_alkaid_sensor_card_status_label_name">Status:&#160;</string>
+    <string name="collector_module_alkaid_sensor_card_timems_label_name">Timems:&#160;</string>
+    <string name="collector_module_alkaid_sensor_card_longitude_label_name">Longitude:&#160;</string>
+    <string name="collector_module_alkaid_sensor_card_latitude_label_name">Latitude:&#160;</string>
+    <string name="collector_module_alkaid_sensor_card_height_label_name">Height:&#160;</string>
+    <string name="collector_module_alkaid_sensor_card_azimuth_label_name">Azimuth:&#160;</string>
+    <string name="collector_module_alkaid_sensor_card_speed_label_name">Speed:&#160;</string>
+    <string name="collector_module_alkaid_sensor_card_age_label_name">Age&#160;</string>
+    <string name="collector_module_alkaid_sensor_card_satsnum_label_name">Satsnum:&#160;</string>
 
     <string name="collector_module_alkaid_sensor_host_setting_text_field_hint_value">Host</string>
     <string name="collector_module_alkaid_sensor_host_setting_text_field_error_text" translatable="false">Could not connect alkaid sensor</string>

@@ -1,5 +1,6 @@
 package cn.edu.whu.lmars.unl;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -9,8 +10,12 @@ import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.location.Location;
 import android.os.Bundle;
-import android.view.View;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 
 import com.google.android.material.button.MaterialButton;
@@ -32,8 +37,6 @@ import cn.edu.whu.lmars.unl.entity.MagneticFieldSensor;
 import cn.edu.whu.lmars.unl.entity.MotionSensors;
 import cn.edu.whu.lmars.unl.entity.PositionSensors;
 import cn.edu.whu.lmars.unl.entity.PressureSensor;
-import cn.edu.whu.lmars.unl.entity.SensorsCollection;
-import cn.edu.whu.lmars.unl.listener.SensorsCollectionListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,8 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private MaterialButton collectorModuleButtonCloseSensors;
     private MaterialButton collectorModuleButtonStartCollect;
     private MaterialButton collectorModuleButtonStopCollect;
-    private MaterialButton collectorModuleButtonTestAlkaidSensor;
-
 
     private String logFolderName = "";
     private TextInputLayout collectorModuleTextInputLayoutLogFolderName;
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private boolean collectorModuleMotionSensorsCardCheckedValue;
+    private boolean collectorModuleMotionSensorsCardCheckableValue;
     private MaterialCardView collectorModuleMotionSensorsCardView;
     private MaterialTextView accelerometerSensorTimestampTextView;
     private MaterialTextView accelerometerSensorAccelerationXTextView;
@@ -63,20 +65,21 @@ public class MainActivity extends AppCompatActivity {
 
 
     private boolean collectorModulePositionSensorsCardCheckedValue;
+    private boolean collectorModulePositionSensorsCardCheckableValue;
     private MaterialCardView collectorModulePositionSensorsCardView;
     private MaterialTextView magneticSensorTimestampTextView;
     private MaterialTextView magneticSensorGeomagneticFieldStrengthXTextView;
     private MaterialTextView magneticSensorGeomagneticFieldStrengthYTextView;
     private MaterialTextView magneticSensorGeomagneticFieldStrengthZTextView;
 
-
     private boolean collectorModuleEnvironmentSensorsCardCheckedValue;
+    private boolean collectorModuleEnvironmentSensorsCardCheckableValue;
     private MaterialCardView collectorModuleEnvironmentSensorsCardView;
     private MaterialTextView pressureSensorTimestampTextView;
     private MaterialTextView pressureSensorGeomagneticFieldStrengthXTextView;
 
-
     private boolean collectorModuleGnssSensorsCardCheckedValue;
+    private boolean collectorModuleGnssSensorsCardCheckableValue;
     private MaterialCardView collectorModuleGnssSensorsCardView;
     private MaterialTextView gnssSensorTimeTextView;
     private MaterialTextView gnssSensorLongitudeTextView;
@@ -85,14 +88,24 @@ public class MainActivity extends AppCompatActivity {
 
 
     private boolean collectorModuleAlkaidSensorsCardCheckedValue;
+    private boolean collectorModuleAlkaidSensorsCardCheckableValue;
     private MaterialCardView collectorModuleAlkaidSensorsCardView;
-    private String alkaidSensorHostSetting = "192.168.2.20";
-    private int alkaidSensorPortSetting = 4300;
+    private MaterialTextView alkaidSensorStatusTextView;
+    private MaterialTextView alkaidSensorTimeTextView;
+    private MaterialTextView alkaidSensorLongitudeTextView;
+    private MaterialTextView alkaidSensorLatitudeTextView;
+    private MaterialTextView alkaidSensorHeightTextView;
+    private MaterialTextView alkaidSensorAzimuthTextView;
+    private MaterialTextView alkaidSensorSpeedTextView;
+    private MaterialTextView alkaidSensorAgeTextView;
+    private MaterialTextView alkaidSensorSatsnumTextView;
+    private String alkaidSensorHostSetting;
+    private int alkaidSensorPortSetting;
     private TextInputLayout collectorModuleTextInputLayoutAlkaidSensorHostSetting;
-    private EditText collectorModuleAlkaidSensorHostSettingEditText;
+    private AutoCompleteTextView collectorModuleAlkaidSensorHostSettingTextView;
     private TextInputLayout collectorModuleTextInputLayoutAlkaidSensorPortSetting;
-    private EditText collectorModuleAlkaidSensorPortSettingEditText;
-
+    private AutoCompleteTextView collectorModuleAlkaidSensorPortSettingTextView;
+    MaterialButton collectorModuleButtonTestAlkaidSensor;
 
     private SensorsLoggerEngine sensorsLoggerEngine;
 
@@ -167,51 +180,259 @@ public class MainActivity extends AppCompatActivity {
         collectorModuleButtonStopCollect.setBackground(DISABLE_MATERIAL_BUTTON_BACKGROUND);
     }
 
-    void updateAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                accelerometerSensorTimestampTextView.setText(String.valueOf(accelerometerSensor.sensorEventTimestamp));
-                accelerometerSensorAccelerationXTextView.setText(String.valueOf(accelerometerSensor.values[0]));
-                accelerometerSensorAccelerationYTextView.setText(String.valueOf(accelerometerSensor.values[1]));
-                accelerometerSensorAccelerationZTextView.setText(String.valueOf(accelerometerSensor.values[2]));
+    private void enableCollectorModuleButtonTestAlkaidSensor() {
+        collectorModuleButtonTestAlkaidSensor.setEnabled(true);
+        collectorModuleButtonTestAlkaidSensor.setBackground(ENABLE_MATERIAL_BUTTON_BACKGROUND);
+    }
+
+    private void disableCollectorModuleButtonTestAlkaidSensor() {
+        collectorModuleButtonTestAlkaidSensor.setEnabled(false);
+        collectorModuleButtonTestAlkaidSensor.setBackground(DISABLE_MATERIAL_BUTTON_BACKGROUND);
+    }
+
+    void initMotionSensorsCard() {
+        collectorModuleMotionSensorsCardView = findViewById(R.id.collector_module_motion_sensors_card);
+        collectorModuleMotionSensorsCardCheckedValue = true;
+        collectorModuleMotionSensorsCardView.setChecked(true);
+        collectorModuleMotionSensorsCardView.setCheckable(false);
+        collectorModuleMotionSensorsCardView.setOnLongClickListener(view -> {
+            if (collectorModuleMotionSensorsCardView.isCheckable()) {
+                collectorModuleMotionSensorsCardCheckedValue = !collectorModuleMotionSensorsCardView.isChecked();
+                collectorModuleMotionSensorsCardView.setChecked(collectorModuleMotionSensorsCardCheckedValue);
             }
+            return true;
         });
+
+        accelerometerSensorTimestampTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_timestamp_value);
+        accelerometerSensorAccelerationXTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_x_value);
+        accelerometerSensorAccelerationYTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_y_value);
+        accelerometerSensorAccelerationZTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_z_value);
+    }
+
+    void updateAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
+        runOnUiThread(() -> {
+            accelerometerSensorTimestampTextView.setText(String.valueOf(accelerometerSensor.sensorEventTimestamp));
+            accelerometerSensorAccelerationXTextView.setText(String.valueOf(accelerometerSensor.values[0]));
+            accelerometerSensorAccelerationYTextView.setText(String.valueOf(accelerometerSensor.values[1]));
+            accelerometerSensorAccelerationZTextView.setText(String.valueOf(accelerometerSensor.values[2]));
+        });
+    }
+
+    void initPositionSensorsCard() {
+        collectorModulePositionSensorsCardView = findViewById(R.id.collector_module_position_sensors_card);
+        collectorModulePositionSensorsCardCheckedValue = true;
+        collectorModulePositionSensorsCardView.setChecked(true);
+        collectorModulePositionSensorsCardView.setCheckable(false);
+        collectorModulePositionSensorsCardView.setOnLongClickListener(view -> {
+            if (collectorModulePositionSensorsCardView.isCheckable()) {
+                collectorModulePositionSensorsCardCheckedValue = !collectorModulePositionSensorsCardView.isChecked();
+                collectorModuleMotionSensorsCardView.setChecked(collectorModulePositionSensorsCardCheckedValue);
+            }
+            return true;
+        });
+
+        magneticSensorTimestampTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_timestamp_value);
+        magneticSensorGeomagneticFieldStrengthXTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_x_value);
+        magneticSensorGeomagneticFieldStrengthYTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_y_value);
+        magneticSensorGeomagneticFieldStrengthZTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_z_value);
     }
 
     void updateMagneticSensor(MagneticFieldSensor magneticFieldSensor) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                magneticSensorTimestampTextView.setText(String.valueOf(magneticFieldSensor.sensorEventTimestamp));
-                magneticSensorGeomagneticFieldStrengthXTextView.setText(String.valueOf(magneticFieldSensor.values[0]));
-                magneticSensorGeomagneticFieldStrengthYTextView.setText(String.valueOf(magneticFieldSensor.values[1]));
-                magneticSensorGeomagneticFieldStrengthZTextView.setText(String.valueOf(magneticFieldSensor.values[2]));
-            }
+        runOnUiThread(() -> {
+            magneticSensorTimestampTextView.setText(String.valueOf(magneticFieldSensor.sensorEventTimestamp));
+            magneticSensorGeomagneticFieldStrengthXTextView.setText(String.valueOf(magneticFieldSensor.values[0]));
+            magneticSensorGeomagneticFieldStrengthYTextView.setText(String.valueOf(magneticFieldSensor.values[1]));
+            magneticSensorGeomagneticFieldStrengthZTextView.setText(String.valueOf(magneticFieldSensor.values[2]));
         });
+    }
+
+    void initEnvironmentSensorsCard() {
+        collectorModuleEnvironmentSensorsCardView = findViewById(R.id.collector_module_environment_sensors_card);
+        collectorModuleEnvironmentSensorsCardCheckedValue = true;
+        collectorModuleEnvironmentSensorsCardView.setChecked(true);
+        collectorModuleEnvironmentSensorsCardView.setCheckable(false);
+        collectorModuleEnvironmentSensorsCardView.setOnLongClickListener(view -> {
+            if (collectorModuleEnvironmentSensorsCardView.isCheckable()) {
+                collectorModuleEnvironmentSensorsCardCheckedValue = !collectorModuleEnvironmentSensorsCardView.isChecked();
+                collectorModuleMotionSensorsCardView.setChecked(collectorModuleEnvironmentSensorsCardCheckedValue);
+            }
+            return true;
+        });
+
+        pressureSensorTimestampTextView = findViewById(R.id.collector_module_motion_sensors_card_pressure_sensor_timestamp_value);
+        pressureSensorGeomagneticFieldStrengthXTextView = findViewById(R.id.collector_module_motion_sensors_card_pressure_sensor_pressure_value);
     }
 
     void updatePressureSensor(PressureSensor pressureSensor) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                pressureSensorTimestampTextView.setText(String.valueOf(pressureSensor.sensorEventTimestamp));
-                pressureSensorGeomagneticFieldStrengthXTextView.setText(String.valueOf(pressureSensor.values[0]));
-            }
+        runOnUiThread(() -> {
+            pressureSensorTimestampTextView.setText(String.valueOf(pressureSensor.sensorEventTimestamp));
+            pressureSensorGeomagneticFieldStrengthXTextView.setText(String.valueOf(pressureSensor.values[0]));
         });
     }
 
-    void updateGnssSensor(GnssSensor gnssSensor) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Location location = gnssSensor.getGnssSensorLocation();
-                gnssSensorTimeTextView.setText(String.valueOf(location.getTime()));
-                gnssSensorLongitudeTextView.setText(String.valueOf(location.getLongitude()));
-                gnssSensorLatitudeTextView.setText(String.valueOf(location.getLatitude()));
-                gnssSensorAccuracyTextView.setText(String.valueOf(location.getAccuracy()));
+    void initGnssSensorCard() {
+        collectorModuleGnssSensorsCardView = findViewById(R.id.collector_module_gnss_sensors_card);
+        collectorModuleGnssSensorsCardCheckedValue = true;
+        collectorModuleGnssSensorsCardView.setChecked(true);
+        collectorModuleGnssSensorsCardView.setCheckable(false);
+        collectorModuleGnssSensorsCardView.setOnLongClickListener(view -> {
+            if (collectorModuleGnssSensorsCardView.isCheckable()) {
+                collectorModuleGnssSensorsCardCheckedValue = !collectorModuleGnssSensorsCardView.isChecked();
+                collectorModuleGnssSensorsCardView.setChecked(collectorModuleGnssSensorsCardCheckedValue);
             }
+            return true;
         });
+
+        gnssSensorTimeTextView = findViewById(R.id.collector_module_gnss_sensor_card_location_time_value);
+        gnssSensorLongitudeTextView = findViewById(R.id.collector_module_gnss_sensor_card_location_longitude_value);
+        gnssSensorLatitudeTextView = findViewById(R.id.collector_module_gnss_sensor_card_location_latitude_value);
+        gnssSensorAccuracyTextView = findViewById(R.id.collector_module_gnss_sensor_card_location_accuracy_value);
+    }
+
+    void updateGnssSensor(GnssSensor gnssSensor) {
+        runOnUiThread(() -> {
+            Location location = gnssSensor.getGnssSensorLocation();
+            gnssSensorTimeTextView.setText(String.valueOf(location.getTime()));
+            gnssSensorLongitudeTextView.setText(String.valueOf(location.getLongitude()));
+            gnssSensorLatitudeTextView.setText(String.valueOf(location.getLatitude()));
+            gnssSensorAccuracyTextView.setText(String.valueOf(location.getAccuracy()));
+        });
+    }
+
+    void initAlkaidSensorCard() {
+        collectorModuleAlkaidSensorsCardView = findViewById(R.id.collector_module_alkaid_sensors_card);
+        collectorModuleAlkaidSensorsCardCheckedValue = false;
+        collectorModuleAlkaidSensorsCardView.setChecked(false);
+        collectorModuleAlkaidSensorsCardView.setCheckable(false);
+        collectorModuleAlkaidSensorsCardView.setOnLongClickListener(view -> {
+            if (collectorModuleAlkaidSensorsCardView.isCheckable()) {
+                collectorModuleAlkaidSensorsCardCheckedValue = !collectorModuleAlkaidSensorsCardView.isChecked();
+                collectorModuleAlkaidSensorsCardView.setChecked(collectorModuleAlkaidSensorsCardCheckedValue);
+            }
+            return true;
+        });
+
+
+        alkaidSensorStatusTextView = findViewById(R.id.collector_module_alkaid_sensor_card_status_value);
+        alkaidSensorTimeTextView = findViewById(R.id.collector_module_alkaid_sensor_card_timems_value);
+        alkaidSensorLongitudeTextView = findViewById(R.id.collector_module_alkaid_sensor_card_longitude_value);
+        alkaidSensorLatitudeTextView = findViewById(R.id.collector_module_alkaid_sensor_card_latitude_value);
+        alkaidSensorHeightTextView = findViewById(R.id.collector_module_alkaid_sensor_card_height_value);
+        alkaidSensorAzimuthTextView = findViewById(R.id.collector_module_alkaid_sensor_card_azimuth_value);
+        alkaidSensorSpeedTextView = findViewById(R.id.collector_module_alkaid_sensor_card_speed_value);
+        alkaidSensorAgeTextView = findViewById(R.id.collector_module_alkaid_sensor_card_age_value);
+        alkaidSensorSatsnumTextView = findViewById(R.id.collector_module_alkaid_sensor_card_satsnum_value);
+
+        collectorModuleTextInputLayoutAlkaidSensorHostSetting = findViewById(R.id.collector_module_text_field_alkaid_sensor_host_setting);
+        collectorModuleAlkaidSensorHostSettingTextView = (AutoCompleteTextView) collectorModuleTextInputLayoutAlkaidSensorHostSetting.getEditText();
+        if (collectorModuleAlkaidSensorHostSettingTextView != null) {
+            String alkaidSensorHostSetting1 = "139.196.6.110";
+            String alkaidSensorHostSetting2 = "192.168.2.20";
+            ArrayList<String> alkaidSensorHostSettingList = new ArrayList<>();
+            alkaidSensorHostSettingList.add(alkaidSensorHostSetting1);
+            alkaidSensorHostSettingList.add(alkaidSensorHostSetting2);
+            ArrayAdapter<String> alkaidSensorHostSettingAdapter = new ArrayAdapter<>(MainActivity.this, R.layout.alkaid_sensor_host_setting_list_item, alkaidSensorHostSettingList);
+            collectorModuleAlkaidSensorHostSettingTextView.setAdapter(alkaidSensorHostSettingAdapter);
+            alkaidSensorHostSetting = alkaidSensorHostSetting1;
+            collectorModuleAlkaidSensorHostSettingTextView.setText(alkaidSensorHostSetting);
+            collectorModuleAlkaidSensorHostSettingTextView.setOnEditorActionListener(
+                    (v, actionId, event) -> {
+                        if (actionId == EditorInfo.IME_ACTION_DONE) {
+                            if (!checkTextInputIsNull(collectorModuleTextInputLayoutAlkaidSensorHostSetting, /* showError= */ true)) {
+                                alkaidSensorHostSetting = String.valueOf(collectorModuleAlkaidSensorHostSettingTextView.getText());
+                            }
+                            return true;
+                        }
+                        return false;
+                    });
+        }
+
+
+        collectorModuleTextInputLayoutAlkaidSensorPortSetting = findViewById(R.id.collector_module_text_field_alkaid_sensor_port_setting);
+        collectorModuleAlkaidSensorPortSettingTextView = (AutoCompleteTextView) collectorModuleTextInputLayoutAlkaidSensorPortSetting.getEditText();
+        if (collectorModuleAlkaidSensorPortSettingTextView != null) {
+            Integer alkaidSensorPortSetting1 = 34300;
+            Integer alkaidSensorPortSetting2 = 4300;
+            ArrayList<Integer> alkaidSensorPortSettingList = new ArrayList<>();
+            alkaidSensorPortSettingList.add(alkaidSensorPortSetting1);
+            alkaidSensorPortSettingList.add(alkaidSensorPortSetting2);
+            ArrayAdapter<Integer> alkaidSensorHostSettingAdapter = new ArrayAdapter<>(MainActivity.this, R.layout.alkaid_sensor_port_setting_list_item, alkaidSensorPortSettingList);
+            collectorModuleAlkaidSensorPortSettingTextView.setAdapter(alkaidSensorHostSettingAdapter);
+            alkaidSensorPortSetting = alkaidSensorPortSetting1;
+            collectorModuleAlkaidSensorPortSettingTextView.setText(String.valueOf(alkaidSensorPortSetting));
+            collectorModuleAlkaidSensorPortSettingTextView.setOnEditorActionListener(
+                    (v, actionId, event) -> {
+                        if (actionId == EditorInfo.IME_ACTION_DONE) {
+                            if (!checkTextInputIsNull(collectorModuleTextInputLayoutAlkaidSensorPortSetting, /* showError= */ true)) {
+                                alkaidSensorPortSetting = Integer.parseInt(String.valueOf(collectorModuleAlkaidSensorPortSettingTextView.getText()));
+                            }
+                            return true;
+                        }
+                        return false;
+                    });
+        }
+
+        collectorModuleButtonTestAlkaidSensor = findViewById(R.id.collector_module_button_test_alkaid_sensor);
+        collectorModuleButtonTestAlkaidSensor.setOnClickListener(view -> {
+            alkaidSensorHostSetting = String.valueOf(collectorModuleAlkaidSensorHostSettingTextView.getText());
+            alkaidSensorPortSetting = Integer.parseInt(String.valueOf(collectorModuleAlkaidSensorPortSettingTextView.getText()));
+
+            Handler handler = new Handler(Looper.myLooper()) {
+                @Override
+                public void handleMessage(@NonNull Message msg) {
+                    super.handleMessage(msg);
+                    if (msg.what == 2022) {
+                        AlkaidSensorPositionProto testAlkaidSensorPositionProto = (AlkaidSensorPositionProto) msg.obj;
+                        if (testAlkaidSensorPositionProto.getStatus() != -1) {
+                            alkaidSensorHostSetting = String.valueOf(collectorModuleAlkaidSensorHostSettingTextView.getText());
+                            alkaidSensorPortSetting = Integer.parseInt(String.valueOf(collectorModuleAlkaidSensorPortSettingTextView.getText()));
+                            collectorModuleAlkaidSensorsCardView.setCheckable(true);
+                            updateAlkaidSensor(testAlkaidSensorPositionProto);
+                        } else {
+                            collectorModuleTextInputLayoutAlkaidSensorHostSetting.setError(getResources().getString(R.string.collector_module_alkaid_sensor_host_setting_text_field_error_text));
+                            collectorModuleAlkaidSensorsCardView.setChecked(false);
+                            collectorModuleAlkaidSensorsCardView.setCheckable(false);
+                        }
+                    }
+                }
+            };
+            AlkaidSensor.testAlkaidSensor(handler, alkaidSensorHostSetting, alkaidSensorPortSetting);
+        });
+    }
+
+    void updateAlkaidSensor(AlkaidSensorPositionProto alkaidSensorPositionProto) {
+        runOnUiThread(() -> {
+            alkaidSensorStatusTextView.setText(String.valueOf(alkaidSensorPositionProto.getStatus()));
+            alkaidSensorTimeTextView.setText(String.valueOf(alkaidSensorPositionProto.getTimems()));
+            alkaidSensorLongitudeTextView.setText(String.valueOf(alkaidSensorPositionProto.getLongitude()));
+            alkaidSensorLatitudeTextView.setText(String.valueOf(alkaidSensorPositionProto.getLatitude()));
+            alkaidSensorHeightTextView.setText(String.valueOf(alkaidSensorPositionProto.getHeight()));
+            alkaidSensorAzimuthTextView.setText(String.valueOf(alkaidSensorPositionProto.getAzimuth()));
+            alkaidSensorSpeedTextView.setText(String.valueOf(alkaidSensorPositionProto.getSpeed()));
+            alkaidSensorAgeTextView.setText(String.valueOf(alkaidSensorPositionProto.getAge()));
+            alkaidSensorSatsnumTextView.setText(String.valueOf(alkaidSensorPositionProto.getSatsnum()));
+        });
+    }
+
+    void lockSensorsCardCheckableStatue() {
+        collectorModuleMotionSensorsCardCheckableValue = collectorModuleMotionSensorsCardView.isCheckable();
+        collectorModuleMotionSensorsCardView.setCheckable(false);
+        collectorModulePositionSensorsCardCheckableValue = collectorModulePositionSensorsCardView.isCheckable();
+        collectorModulePositionSensorsCardView.setCheckable(false);
+        collectorModuleEnvironmentSensorsCardCheckableValue= collectorModuleEnvironmentSensorsCardView.isCheckable();
+        collectorModuleEnvironmentSensorsCardView.setCheckable(false);
+        collectorModuleGnssSensorsCardCheckableValue = collectorModuleGnssSensorsCardView.isCheckable();
+        collectorModuleGnssSensorsCardView.setCheckable(false);
+        collectorModuleAlkaidSensorsCardCheckableValue = collectorModuleAlkaidSensorsCardView.isCheckable();
+        collectorModuleAlkaidSensorsCardView.setCheckable(false);
+    }
+
+    void unlockSensorsCardCheckableStatue() {
+        collectorModuleMotionSensorsCardView.setCheckable(collectorModuleMotionSensorsCardCheckableValue);
+        collectorModulePositionSensorsCardView.setCheckable(collectorModulePositionSensorsCardCheckableValue);
+        collectorModuleEnvironmentSensorsCardView.setCheckable(collectorModuleEnvironmentSensorsCardCheckableValue);
+        collectorModuleGnssSensorsCardView.setCheckable(collectorModuleGnssSensorsCardCheckableValue);
+        collectorModuleAlkaidSensorsCardView.setCheckable(collectorModuleAlkaidSensorsCardCheckableValue);
     }
 
     private ArrayList<Integer> getSelectedLogSensorsTypeList() {
@@ -268,35 +489,37 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<Integer> logSensorsTypeList = getSelectedLogSensorsTypeList();
 //            logSensorsTypeList.add(2022);
             sensorsLoggerEngineOption.setLogSensorsTypeList(logSensorsTypeList);
-//            if (logSensorsTypeList.contains(SensorsLoggerEngine.SENSOR_TYPE_ALKAID)) {
-//                sensorsLoggerEngineOption.setAlkaidSensorHost(alkaidSensorHostSetting);
-//                sensorsLoggerEngineOption.setAlkaidSensorPort(alkaidSensorPortSetting);
-//            }
+            if (logSensorsTypeList.contains(SensorsLoggerEngine.SENSOR_TYPE_ALKAID)) {
+                sensorsLoggerEngineOption.setAlkaidSensorHost(alkaidSensorHostSetting);
+                sensorsLoggerEngineOption.setAlkaidSensorPort(alkaidSensorPortSetting);
+            }
             sensorsLoggerEngine = new SensorsLoggerEngine(MainActivity.this);
-            sensorsLoggerEngine.registerSensorsCollectionListener(new SensorsCollectionListener() {
-                @Override
-                public void onSensorsCollectionUpdated(SensorsCollection sensorsCollection) {
-                    if (collectorModuleMotionSensorsCardCheckedValue) {
-                        MotionSensors motionSensors = sensorsCollection.getMotionSensors();
-                        AccelerometerSensor accelerometerSensor = motionSensors.getAccelerometerSensor();
-                        updateAccelerometerSensor(accelerometerSensor);
-                    }
+            sensorsLoggerEngine.registerSensorsCollectionListener(sensorsCollection -> {
+                if (collectorModuleMotionSensorsCardCheckedValue) {
+                    MotionSensors motionSensors = sensorsCollection.getMotionSensors();
+                    AccelerometerSensor accelerometerSensor = motionSensors.getAccelerometerSensor();
+                    updateAccelerometerSensor(accelerometerSensor);
+                }
 
-                    if (collectorModulePositionSensorsCardCheckedValue) {
-                        PositionSensors positionSensors = sensorsCollection.getPositionSensors();
-                        MagneticFieldSensor magneticFieldSensor = positionSensors.getMagneticFieldSensor();
-                        updateMagneticSensor(magneticFieldSensor);
-                    }
-                    if (collectorModuleEnvironmentSensorsCardCheckedValue) {
-                        EnvironmentSensors environmentSensors = sensorsCollection.getEnvironmentSensors();
-                        PressureSensor pressureSensor = environmentSensors.getPressureSensor();
-                        updatePressureSensor(pressureSensor);
-                    }
+                if (collectorModulePositionSensorsCardCheckedValue) {
+                    PositionSensors positionSensors = sensorsCollection.getPositionSensors();
+                    MagneticFieldSensor magneticFieldSensor = positionSensors.getMagneticFieldSensor();
+                    updateMagneticSensor(magneticFieldSensor);
+                }
+                if (collectorModuleEnvironmentSensorsCardCheckedValue) {
+                    EnvironmentSensors environmentSensors = sensorsCollection.getEnvironmentSensors();
+                    PressureSensor pressureSensor = environmentSensors.getPressureSensor();
+                    updatePressureSensor(pressureSensor);
+                }
 
-                    if (collectorModuleGnssSensorsCardCheckedValue) {
-                        GnssSensor gnssSensor = sensorsCollection.getGnssSensor();
-                        updateGnssSensor(gnssSensor);
-                    }
+                if (collectorModuleGnssSensorsCardCheckedValue) {
+                    GnssSensor gnssSensor = sensorsCollection.getGnssSensor();
+                    updateGnssSensor(gnssSensor);
+                }
+
+                if (collectorModuleAlkaidSensorsCardCheckedValue) {
+                    AlkaidSensor alkaidSensor = sensorsCollection.getAlkaidSensor();
+                    updateAlkaidSensor(alkaidSensor.getAlkaidSensorPositionProto());
                 }
             });
             sensorsLoggerEngine.openSensors(sensorsLoggerEngineOption);
@@ -304,6 +527,9 @@ public class MainActivity extends AppCompatActivity {
             disableCollectorModuleButtonOpenSensors();
             enableCollectorModuleButtonCloseSensors();
             enableCollectorModuleButtonStartCollect();
+
+            lockSensorsCardCheckableStatue();
+            disableCollectorModuleButtonTestAlkaidSensor();
         });
 
         collectorModuleButtonCloseSensors = findViewById(R.id.collector_module_button_close_sensors);
@@ -313,6 +539,8 @@ public class MainActivity extends AppCompatActivity {
             disableCollectorModuleButtonCloseSensors();
             enableCollectorModuleButtonOpenSensors();
             disableCollectorModuleButtonStartCollect();
+            unlockSensorsCardCheckableStatue();
+            enableCollectorModuleButtonTestAlkaidSensor();
         });
 
         collectorModuleButtonStartCollect = findViewById(R.id.collector_module_button_start_collect);
@@ -334,109 +562,8 @@ public class MainActivity extends AppCompatActivity {
             enableCollectorModuleButtonCloseSensors();
         });
 
-        collectorModuleButtonTestAlkaidSensor = findViewById(R.id.collector_module_button_test_alkaid_sensor);
-        collectorModuleButtonTestAlkaidSensor.setOnClickListener(view -> {
-            AlkaidSensorPositionProto testAlkaidSensorPositionProto = null;
-            alkaidSensorHostSetting = String.valueOf(collectorModuleAlkaidSensorHostSettingEditText.getText());
-            alkaidSensorPortSetting = Integer.parseInt(String.valueOf(collectorModuleAlkaidSensorPortSettingEditText.getText()));
-            try {
-                testAlkaidSensorPositionProto = AlkaidSensor.testAlkaidSensor(alkaidSensorHostSetting, alkaidSensorPortSetting);
-                if (testAlkaidSensorPositionProto.getStatus() != -1) {
-                    alkaidSensorHostSetting = String.valueOf(collectorModuleAlkaidSensorHostSettingEditText.getText());
-                    alkaidSensorPortSetting = Integer.parseInt(String.valueOf(collectorModuleAlkaidSensorPortSettingEditText.getText()));
-                    collectorModuleAlkaidSensorsCardView.setCheckable(true);
-                }
-            } catch (Exception e) {
-                collectorModuleTextInputLayoutAlkaidSensorHostSetting.setError(getResources().getString(R.string.collector_module_alkaid_sensor_host_setting_text_field_error_text));
-                collectorModuleAlkaidSensorsCardView.setChecked(false);
-                collectorModuleAlkaidSensorsCardView.setCheckable(false);
-                e.printStackTrace();
-            }
-        });
-
         ENABLE_MATERIAL_BUTTON_BACKGROUND = collectorModuleButtonOpenSensors.getBackground();
         DISABLE_MATERIAL_BUTTON_BACKGROUND = collectorModuleButtonCloseSensors.getBackground();
-
-        collectorModuleMotionSensorsCardView = findViewById(R.id.collector_module_motion_sensors_card);
-        collectorModuleMotionSensorsCardView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                collectorModuleMotionSensorsCardCheckedValue = !collectorModuleMotionSensorsCardView.isChecked();
-                collectorModuleMotionSensorsCardView.setChecked(collectorModuleMotionSensorsCardCheckedValue);
-                return true;
-            }
-        });
-        collectorModuleMotionSensorsCardCheckedValue = true;
-        collectorModuleMotionSensorsCardView.setChecked(true);
-        collectorModuleMotionSensorsCardView.setCheckable(false);
-        accelerometerSensorTimestampTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_timestamp_value);
-        accelerometerSensorAccelerationXTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_x_value);
-        accelerometerSensorAccelerationYTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_y_value);
-        accelerometerSensorAccelerationZTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_z_value);
-
-        collectorModulePositionSensorsCardView = findViewById(R.id.collector_module_position_sensors_card);
-        collectorModulePositionSensorsCardView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                collectorModulePositionSensorsCardCheckedValue = !collectorModulePositionSensorsCardView.isChecked();
-                collectorModuleMotionSensorsCardView.setChecked(collectorModulePositionSensorsCardCheckedValue);
-                return true;
-            }
-        });
-        collectorModulePositionSensorsCardCheckedValue = true;
-        collectorModulePositionSensorsCardView.setChecked(true);
-        collectorModulePositionSensorsCardView.setCheckable(false);
-        magneticSensorTimestampTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_timestamp_value);
-        magneticSensorGeomagneticFieldStrengthXTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_x_value);
-        magneticSensorGeomagneticFieldStrengthYTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_y_value);
-        magneticSensorGeomagneticFieldStrengthZTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_z_value);
-
-        collectorModuleEnvironmentSensorsCardView = findViewById(R.id.collector_module_environment_sensors_card);
-        collectorModuleEnvironmentSensorsCardView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                collectorModuleEnvironmentSensorsCardCheckedValue = !collectorModuleEnvironmentSensorsCardView.isChecked();
-                collectorModuleMotionSensorsCardView.setChecked(collectorModuleEnvironmentSensorsCardCheckedValue);
-                return true;
-            }
-        });
-        collectorModuleEnvironmentSensorsCardCheckedValue = true;
-        collectorModuleEnvironmentSensorsCardView.setChecked(true);
-        collectorModuleEnvironmentSensorsCardView.setCheckable(false);
-        pressureSensorTimestampTextView = findViewById(R.id.collector_module_motion_sensors_card_pressure_sensor_timestamp_value);
-        pressureSensorGeomagneticFieldStrengthXTextView = findViewById(R.id.collector_module_motion_sensors_card_pressure_sensor_pressure_value);
-
-
-        collectorModuleGnssSensorsCardView = findViewById(R.id.collector_module_gnss_sensors_card);
-        collectorModuleGnssSensorsCardView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                collectorModuleGnssSensorsCardCheckedValue = !collectorModuleGnssSensorsCardView.isChecked();
-                collectorModuleGnssSensorsCardView.setChecked(collectorModuleGnssSensorsCardCheckedValue);
-                return true;
-            }
-        });
-        collectorModuleGnssSensorsCardCheckedValue = true;
-        collectorModuleGnssSensorsCardView.setChecked(true);
-        collectorModuleGnssSensorsCardView.setCheckable(false);
-        gnssSensorTimeTextView = findViewById(R.id.collector_module_gnss_sensor_card_location_time_value);
-        gnssSensorLongitudeTextView = findViewById(R.id.collector_module_gnss_sensor_card_location_longitude_value);
-        gnssSensorLatitudeTextView = findViewById(R.id.collector_module_gnss_sensor_card_location_latitude_value);
-        gnssSensorAccuracyTextView = findViewById(R.id.collector_module_gnss_sensor_card_location_accuracy_value);
-
-
-        collectorModuleAlkaidSensorsCardView = findViewById(R.id.collector_module_alkaid_sensors_card);
-        collectorModuleAlkaidSensorsCardView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                collectorModuleAlkaidSensorsCardCheckedValue = !collectorModuleAlkaidSensorsCardView.isChecked();
-                collectorModuleAlkaidSensorsCardView.setChecked(collectorModuleAlkaidSensorsCardCheckedValue);
-                return true;
-            }
-        });
-        collectorModuleAlkaidSensorsCardCheckedValue = false;
-        collectorModuleAlkaidSensorsCardView.setChecked(false);
-        collectorModuleAlkaidSensorsCardView.setCheckable(false);
 
         collectorModuleTextInputLayoutLogFolderName = findViewById(R.id.collector_module_text_field_log_folder_name);
         collectorModuleLogFolderNameEditText = collectorModuleTextInputLayoutLogFolderName.getEditText();
@@ -451,33 +578,11 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 });
 
-        collectorModuleTextInputLayoutAlkaidSensorHostSetting = findViewById(R.id.collector_module_text_field_alkaid_sensor_host_setting);
-        collectorModuleAlkaidSensorHostSettingEditText = collectorModuleTextInputLayoutAlkaidSensorHostSetting.getEditText();
-        collectorModuleAlkaidSensorHostSettingEditText.setText(alkaidSensorHostSetting);
-        collectorModuleAlkaidSensorHostSettingEditText.setOnEditorActionListener(
-                (v, actionId, event) -> {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        if (!checkTextInputIsNull(collectorModuleTextInputLayoutAlkaidSensorHostSetting, /* showError= */ true)) {
-                            alkaidSensorHostSetting = String.valueOf(collectorModuleAlkaidSensorHostSettingEditText.getText());
-                        }
-                        return true;
-                    }
-                    return false;
-                });
-
-        collectorModuleTextInputLayoutAlkaidSensorPortSetting = findViewById(R.id.collector_module_text_field_alkaid_sensor_port_setting);
-        collectorModuleAlkaidSensorPortSettingEditText = collectorModuleTextInputLayoutAlkaidSensorPortSetting.getEditText();
-        collectorModuleAlkaidSensorPortSettingEditText.setText(String.valueOf(alkaidSensorPortSetting));
-        collectorModuleAlkaidSensorPortSettingEditText.setOnEditorActionListener(
-                (v, actionId, event) -> {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        if (!checkTextInputIsNull(collectorModuleTextInputLayoutAlkaidSensorPortSetting, /* showError= */ true)) {
-                            alkaidSensorPortSetting = Integer.parseInt(String.valueOf(collectorModuleAlkaidSensorPortSettingEditText.getText()));
-                        }
-                        return true;
-                    }
-                    return false;
-                });
+        initMotionSensorsCard();
+        initPositionSensorsCard();
+        initEnvironmentSensorsCard();
+        initGnssSensorCard();
+        initAlkaidSensorCard();
     }
 
 

@@ -144,12 +144,12 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        StringBuilder stringBuilder;
-        stringBuilder = new StringBuilder();
-        stringBuilder.append(location.getTime());
-        stringBuilder.append(", ").append(location.getLongitude());
-        stringBuilder.append(", ").append(location.getLatitude());
-        Log.d(TAG, "onLocationChanged: " + stringBuilder);
+//        StringBuilder stringBuilder;
+//        stringBuilder = new StringBuilder();
+//        stringBuilder.append(location.getTime());
+//        stringBuilder.append(", ").append(location.getLongitude());
+//        stringBuilder.append(", ").append(location.getLatitude());
+//        Log.d(TAG, "onLocationChanged: " + stringBuilder);
         sensorsCollection.updateLocationValues(location);
     }
 

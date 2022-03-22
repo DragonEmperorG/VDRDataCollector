@@ -1,5 +1,7 @@
 package cn.edu.whu.lmars.unl.entity;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
@@ -32,7 +34,7 @@ public class AlkaidSensor {
     private HttpUrl ALKAID_SENSOR_INTERFACE_URL;
     private Request ALKAID_SENSOR_INTERFACE_REQUEST;
 
-    private static AlkaidSensorPositionProto rAlkaidSensorPositionProto;
+    private AlkaidSensorPositionProto alkaidSensorPositionProto;
 
     public AlkaidSensor() {
         ALKAID_SENSOR_INTERFACE_URL = new HttpUrl.Builder()
@@ -44,6 +46,12 @@ public class AlkaidSensor {
         ALKAID_SENSOR_INTERFACE_REQUEST = new Request.Builder()
                 .url(ALKAID_SENSOR_INTERFACE_URL)
                 .build();
+
+        alkaidSensorPositionProto = new AlkaidSensorPositionProto();
+    }
+
+    public AlkaidSensorPositionProto getAlkaidSensorPositionProto() {
+        return alkaidSensorPositionProto;
     }
 
     public void configAlkaidSensor(String host, int port) {
@@ -71,9 +79,9 @@ public class AlkaidSensor {
                     if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
                     assert responseBody != null;
                     String responseBodyString = responseBody.string();
-                    Log.d(TAG, "onResponse: " + responseBodyString);
-                    AlkaidSensorPositionProto alkaidSensorPositionProto = JSON.parseObject(responseBodyString, AlkaidSensorPositionProto.class);
-                    Log.d(TAG, "onResponse: " + alkaidSensorPositionProto.getTimems());
+//                    Log.d(TAG, "onResponse: " + responseBodyString);
+                    alkaidSensorPositionProto = JSON.parseObject(responseBodyString, AlkaidSensorPositionProto.class);
+//                    Log.d(TAG, "onResponse: " + alkaidSensorPositionProto.getTimems());
 
                     sensorSentRequestTimestamp = response.sentRequestAtMillis();
                     sensorReceivedResponseTimestamp = response.receivedResponseAtMillis();
@@ -88,6 +96,8 @@ public class AlkaidSensor {
                     stringBuilder.append(", ").append(alkaidSensorPositionProto.getHeight());
                     stringBuilder.append(", ").append(alkaidSensorPositionProto.getAzimuth());
                     stringBuilder.append(", ").append(alkaidSensorPositionProto.getSpeed());
+                    stringBuilder.append(", ").append(alkaidSensorPositionProto.getAge());
+                    stringBuilder.append(", ").append(alkaidSensorPositionProto.getSatsnum());
                     csvFormattedValues = stringBuilder.toString();
                 }
             }
@@ -98,30 +108,44 @@ public class AlkaidSensor {
         return csvFormattedValues;
     }
 
-    public static AlkaidSensorPositionProto testAlkaidSensor(String host, int port) throws Exception {
-        HttpUrl SHANGHAI_PROJECT_URL = new HttpUrl.Builder()
-                .scheme(ALKAID_SENSOR_INTERFACE_URL_SCHEME)
-                .host(host)
-                .port(port)
-                .addPathSegment("position")
-                .build();
+    public static void testAlkaidSensor(Handler handler, String host, int port) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HttpUrl SHANGHAI_PROJECT_URL = new HttpUrl.Builder()
+                        .scheme(ALKAID_SENSOR_INTERFACE_URL_SCHEME)
+                        .host(host)
+                        .port(port)
+                        .addPathSegment("position")
+                        .build();
 
-        Request request = new Request.Builder()
-                .url(SHANGHAI_PROJECT_URL)
-                .build();
+                Request request = new Request.Builder()
+                        .url(SHANGHAI_PROJECT_URL)
+                        .build();
 
-        OkHttpClient testAlkaidSensorClient = new OkHttpClient();
-        rAlkaidSensorPositionProto = new AlkaidSensorPositionProto();
-        try (Response response = testAlkaidSensorClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-            try (ResponseBody responseBody = response.body()) {
-                String responseBodyString = responseBody.string();
-                Log.d(TAG, "testAlkaidSensor: " + responseBodyString);
-//                rAlkaidSensorPositionProto = JSON.parseObject(responseBodyString, AlkaidSensorPositionProto.class);
-                return rAlkaidSensorPositionProto;
+                AlkaidSensorPositionProto rAlkaidSensorPositionProto = new AlkaidSensorPositionProto();
+
+                OkHttpClient testAlkaidSensorClient = new OkHttpClient();
+                try (Response response = testAlkaidSensorClient.newCall(request).execute()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+                    try (ResponseBody responseBody = response.body()) {
+                        String responseBodyString = responseBody.string();
+                        Log.d(TAG, "testAlkaidSensor: " + responseBodyString);
+                        rAlkaidSensorPositionProto = JSON.parseObject(responseBodyString, AlkaidSensorPositionProto.class);
+                        Message message = new Message();
+                        message.what = 2022;
+                        message.obj = rAlkaidSensorPositionProto;
+                        handler.sendMessage(message);
+                    }
+                } catch (IOException e) {
+                    Message message = new Message();
+                    message.what = 2022;
+                    message.obj = rAlkaidSensorPositionProto;
+                    handler.sendMessage(message);
+                    e.printStackTrace();
+                }
             }
-        }
-
+        }).start();
     }
 
 }

@@ -144,7 +144,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:baselineAligned="false">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -183,7 +184,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:paddingTop="@dimen/sensor_card_single_spacing">
+                            android:paddingTop="@dimen/sensor_card_single_spacing"
+                            android:baselineAligned="false">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -308,7 +310,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:baselineAligned="false">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -345,7 +348,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:baselineAligned="false">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -471,7 +475,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:baselineAligned="false">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -483,7 +488,7 @@
                                 <androidx.appcompat.widget.AppCompatImageView
                                     android:layout_width="24dp"
                                     android:layout_height="24dp"
-                                    app:srcCompat="@drawable/icon_satellites" />
+                                    app:srcCompat="@drawable/icons_environment" />
 
                             </LinearLayout>
 
@@ -509,7 +514,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:baselineAligned="false">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -593,7 +599,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:baselineAligned="false">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -720,7 +727,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:baselineAligned="false">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -743,7 +751,7 @@
                             android:orientation="vertical"
                             android:paddingTop="@dimen/sensor_card_single_spacing"
                             android:paddingBottom="@dimen/sensor_card_single_spacing"
-                            android:paddingRight="@dimen/sensor_card_single_spacing">
+                            android:paddingEnd="@dimen/sensor_card_single_spacing">
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:layout_width="wrap_content"
@@ -764,11 +772,155 @@
                                     <com.google.android.material.textview.MaterialTextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@string/collector_module_alkaid_sensor_card_title_name"
+                                        android:text="@string/collector_module_alkaid_sensor_card_status_label_name"
                                         android:textAppearance="?attr/textAppearanceLabelMedium" />
 
                                     <com.google.android.material.textview.MaterialTextView
-                                        android:id="@+id/collector_module_alkaid_sensor_card_accelerometer_sensor_timestamp_value"
+                                        android:id="@+id/collector_module_alkaid_sensor_card_status_value"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/collector_module_alkaid_sensor_card_timems_label_name"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/collector_module_alkaid_sensor_card_timems_value"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/collector_module_alkaid_sensor_card_longitude_label_name"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/collector_module_alkaid_sensor_card_longitude_value"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/collector_module_alkaid_sensor_card_latitude_label_name"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/collector_module_alkaid_sensor_card_latitude_value"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/collector_module_alkaid_sensor_card_height_label_name"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/collector_module_alkaid_sensor_card_height_value"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/collector_module_alkaid_sensor_card_azimuth_label_name"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/collector_module_alkaid_sensor_card_azimuth_value"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/collector_module_alkaid_sensor_card_speed_label_name"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/collector_module_alkaid_sensor_card_speed_value"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/collector_module_alkaid_sensor_card_age_label_name"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/collector_module_alkaid_sensor_card_age_value"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@string/collector_module_alkaid_sensor_card_satsnum_label_name"
+                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                    <com.google.android.material.textview.MaterialTextView
+                                        android:id="@+id/collector_module_alkaid_sensor_card_satsnum_value"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:textAppearance="?attr/textAppearanceLabelMedium" />
@@ -783,14 +935,14 @@
 
                                     <com.google.android.material.textfield.TextInputLayout
                                         android:id="@+id/collector_module_text_field_alkaid_sensor_host_setting"
-                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="start"
                                         android:layout_margin="4dp"
                                         android:hint="@string/collector_module_alkaid_sensor_host_setting_text_field_hint_value">
 
-                                        <com.google.android.material.textfield.TextInputEditText
+                                        <AutoCompleteTextView
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:singleLine="true" />
@@ -799,7 +951,7 @@
 
                                     <com.google.android.material.textfield.TextInputLayout
                                         android:id="@+id/collector_module_text_field_alkaid_sensor_port_setting"
-                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="start"
@@ -807,7 +959,7 @@
                                         android:layout_marginTop="@dimen/sensor_card_single_spacing"
                                         android:hint="@string/collector_module_alkaid_sensor_port_setting_text_field_hint_value">
 
-                                        <com.google.android.material.textfield.TextInputEditText
+                                        <AutoCompleteTextView
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:singleLine="true" />
