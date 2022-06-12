@@ -19,6 +19,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cn.edu.whu.lmars.unl.entity.SensorsCollection;
 import cn.edu.whu.lmars.unl.listener.SensorsCollectionListener;
@@ -48,7 +49,7 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
 
     private int sensorsLoggerEngineStatus = 0;
 
-    private final SensorsCollection sensorsCollection;
+    private SensorsCollection sensorsCollection;
 
     private SensorsCollectionListener sensorsCollectionListener = null;
 

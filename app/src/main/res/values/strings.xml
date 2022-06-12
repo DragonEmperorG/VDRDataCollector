@@ -13,6 +13,7 @@
     <string name="collector_module_motion_sensors_card_title_name">Motion Sensors</string>
 
     <string name="collector_module_motion_sensors_card_accelerometer_sensor_subtitle_name">Accelerometer Sensor</string>
+    <string name="collector_module_motion_sensors_card_accelerometer_sensor_name_label_name">Name:&#160;</string>
     <string name="collector_module_motion_sensors_card_accelerometer_sensor_timestamp_label_name">Sensor Event Timestamp:&#160;</string>
     <string name="collector_module_motion_sensors_card_accelerometer_sensor_acceleration_x_label_name">Acceleration X:&#160;</string>
     <string name="collector_module_motion_sensors_card_accelerometer_sensor_acceleration_y_label_name">Acceleration Y:&#160;</string>
@@ -28,9 +29,10 @@
 
     <string name="collector_module_environment_sensors_choice_chip_name">Environment sensors</string>
 
-    <string name="collector_module_motion_sensors_card_pressure_sensor_subtitle_name">Pressure Sensor</string>
-    <string name="collector_module_motion_sensors_card_pressure_sensor_timestamp_label_name">Sensor Event Timestamp:&#160;</string>
-    <string name="collector_module_motion_sensors_card_pressure_sensor_pressure_label_name">Pressure:&#160;</string>
+    <string name="collector_module_environment_sensors_card_pressure_sensor_subtitle_name">Pressure Sensor</string>
+    <string name="collector_module_environment_sensors_card_pressure_sensor_name_label_name">Name:&#160;</string>
+    <string name="collector_module_environment_sensors_card_pressure_sensor_timestamp_label_name">Sensor Event Timestamp:&#160;</string>
+    <string name="collector_module_environment_sensors_card_pressure_sensor_pressure_label_name">Pressure:&#160;</string>
 
     <string name="collector_module_gnss_sensor_choice_chip_name">GNSS</string>
     <string name="collector_module_gnss_sensor_card_title_name">GNSS Sensor</string>

@@ -13,10 +13,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.card.MaterialCardView;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean collectorModuleMotionSensorsCardCheckedValue;
     private boolean collectorModuleMotionSensorsCardCheckableValue;
     private MaterialCardView collectorModuleMotionSensorsCardView;
+    private MaterialTextView accelerometerSensorNameTextView;
     private MaterialTextView accelerometerSensorTimestampTextView;
     private MaterialTextView accelerometerSensorAccelerationXTextView;
     private MaterialTextView accelerometerSensorAccelerationYTextView;
@@ -75,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean collectorModuleEnvironmentSensorsCardCheckedValue;
     private boolean collectorModuleEnvironmentSensorsCardCheckableValue;
     private MaterialCardView collectorModuleEnvironmentSensorsCardView;
+    private MaterialTextView pressureSensorNameTextView;
     private MaterialTextView pressureSensorTimestampTextView;
     private MaterialTextView pressureSensorGeomagneticFieldStrengthXTextView;
 
@@ -107,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
     private AutoCompleteTextView collectorModuleAlkaidSensorPortSettingTextView;
     MaterialButton collectorModuleButtonTestAlkaidSensor;
 
+    private SensorHelper sensorHelper;
     private SensorsLoggerEngine sensorsLoggerEngine;
 
     @Override
@@ -119,7 +124,9 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        initHelper();
         initView();
+
     }
 
     private boolean isRecordPermissionGranted() {
@@ -193,20 +200,30 @@ public class MainActivity extends AppCompatActivity {
     void initMotionSensorsCard() {
         collectorModuleMotionSensorsCardView = findViewById(R.id.collector_module_motion_sensors_card);
         collectorModuleMotionSensorsCardCheckedValue = true;
-        collectorModuleMotionSensorsCardView.setChecked(true);
-        collectorModuleMotionSensorsCardView.setCheckable(false);
-        collectorModuleMotionSensorsCardView.setOnLongClickListener(view -> {
-            if (collectorModuleMotionSensorsCardView.isCheckable()) {
-                collectorModuleMotionSensorsCardCheckedValue = !collectorModuleMotionSensorsCardView.isChecked();
-                collectorModuleMotionSensorsCardView.setChecked(collectorModuleMotionSensorsCardCheckedValue);
-            }
-            return true;
-        });
+        if (sensorHelper.hasSensor(Sensor.TYPE_ACCELEROMETER)) {
+            collectorModuleMotionSensorsCardView.setChecked(true);
+            collectorModuleMotionSensorsCardView.setCheckable(false);
+            collectorModuleMotionSensorsCardView.setOnLongClickListener(view -> {
+                if (collectorModuleMotionSensorsCardView.isCheckable()) {
+                    collectorModuleMotionSensorsCardCheckedValue = !collectorModuleMotionSensorsCardView.isChecked();
+                    collectorModuleMotionSensorsCardView.setChecked(collectorModuleMotionSensorsCardCheckedValue);
+                }
+                return true;
+            });
 
-        accelerometerSensorTimestampTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_timestamp_value);
-        accelerometerSensorAccelerationXTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_x_value);
-        accelerometerSensorAccelerationYTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_y_value);
-        accelerometerSensorAccelerationZTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_z_value);
+            accelerometerSensorNameTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_name_value);
+            accelerometerSensorNameTextView.setText(sensorHelper.getSensorText(Sensor.TYPE_ACCELEROMETER));
+            accelerometerSensorTimestampTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_timestamp_value);
+            accelerometerSensorAccelerationXTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_x_value);
+            accelerometerSensorAccelerationYTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_y_value);
+            accelerometerSensorAccelerationZTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_z_value);
+        } else {
+            collectorModuleMotionSensorsCardView.setChecked(false);
+            collectorModuleMotionSensorsCardView.setCheckable(false);
+            LinearLayout linearLayout = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_info_layout);
+            linearLayout.setVisibility(View.GONE);
+        }
+
     }
 
     void updateAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
@@ -249,18 +266,29 @@ public class MainActivity extends AppCompatActivity {
     void initEnvironmentSensorsCard() {
         collectorModuleEnvironmentSensorsCardView = findViewById(R.id.collector_module_environment_sensors_card);
         collectorModuleEnvironmentSensorsCardCheckedValue = true;
-        collectorModuleEnvironmentSensorsCardView.setChecked(true);
-        collectorModuleEnvironmentSensorsCardView.setCheckable(false);
-        collectorModuleEnvironmentSensorsCardView.setOnLongClickListener(view -> {
-            if (collectorModuleEnvironmentSensorsCardView.isCheckable()) {
-                collectorModuleEnvironmentSensorsCardCheckedValue = !collectorModuleEnvironmentSensorsCardView.isChecked();
-                collectorModuleMotionSensorsCardView.setChecked(collectorModuleEnvironmentSensorsCardCheckedValue);
-            }
-            return true;
-        });
+        if (sensorHelper.hasSensor(Sensor.TYPE_PRESSURE)) {
+            collectorModuleEnvironmentSensorsCardView.setChecked(true);
+            collectorModuleEnvironmentSensorsCardView.setCheckable(false);
+            collectorModuleEnvironmentSensorsCardView.setOnLongClickListener(view -> {
+                if (collectorModuleEnvironmentSensorsCardView.isCheckable()) {
+                    collectorModuleEnvironmentSensorsCardCheckedValue = !collectorModuleEnvironmentSensorsCardView.isChecked();
+                    collectorModuleMotionSensorsCardView.setChecked(collectorModuleEnvironmentSensorsCardCheckedValue);
+                }
+                return true;
+            });
 
-        pressureSensorTimestampTextView = findViewById(R.id.collector_module_motion_sensors_card_pressure_sensor_timestamp_value);
-        pressureSensorGeomagneticFieldStrengthXTextView = findViewById(R.id.collector_module_motion_sensors_card_pressure_sensor_pressure_value);
+            pressureSensorTimestampTextView = findViewById(R.id.collector_module_environment_sensors_card_pressure_sensor_name_value);
+            pressureSensorTimestampTextView.setText(sensorHelper.getSensorText(Sensor.TYPE_PRESSURE));
+            pressureSensorTimestampTextView = findViewById(R.id.collector_module_motion_sensors_card_pressure_sensor_timestamp_value);
+            pressureSensorGeomagneticFieldStrengthXTextView = findViewById(R.id.collector_module_environment_sensors_card_pressure_sensor_pressure_value);
+        } else {
+            collectorModuleEnvironmentSensorsCardView.setChecked(false);
+            collectorModuleEnvironmentSensorsCardView.setCheckable(false);
+            LinearLayout linearLayout = findViewById(R.id.collector_module_environment_sensors_card_pressure_sensor_info_layout);
+            linearLayout.setVisibility(View.GONE);
+        }
+
+
     }
 
     void updatePressureSensor(PressureSensor pressureSensor) {
@@ -585,5 +613,8 @@ public class MainActivity extends AppCompatActivity {
         initAlkaidSensorCard();
     }
 
+    private void initHelper() {
+        sensorHelper = new SensorHelper(MainActivity.this);
+    }
 
 }

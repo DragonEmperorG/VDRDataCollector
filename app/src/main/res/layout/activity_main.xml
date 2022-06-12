@@ -144,8 +144,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:baselineAligned="false">
+                            android:baselineAligned="false"
+                            android:orientation="horizontal">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -183,9 +183,9 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:baselineAligned="false"
                             android:orientation="horizontal"
-                            android:paddingTop="@dimen/sensor_card_single_spacing"
-                            android:baselineAligned="false">
+                            android:paddingTop="@dimen/sensor_card_single_spacing">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -202,8 +202,8 @@
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
                                 android:layout_weight="1.0"
+                                android:orientation="vertical"
                                 android:paddingTop="@dimen/sensor_card_single_spacing"
                                 android:paddingBottom="@dimen/sensor_card_single_spacing">
 
@@ -214,74 +214,100 @@
                                     android:textAppearance="?attr/textAppearanceTitleSmall" />
 
                                 <LinearLayout
+                                    android:id="@+id/collector_module_motion_sensors_card_accelerometer_sensor_info_layout"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
 
-                                    <com.google.android.material.textview.MaterialTextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/collector_module_motion_sensors_card_accelerometer_sensor_timestamp_label_name"
-                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
 
-                                    <com.google.android.material.textview.MaterialTextView
-                                        android:id="@+id/collector_module_motion_sensors_card_accelerometer_sensor_timestamp_value"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/collector_module_motion_sensors_card_accelerometer_sensor_name_label_name"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
 
-                                </LinearLayout>
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:id="@+id/collector_module_motion_sensors_card_accelerometer_sensor_name_value"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    </LinearLayout>
 
-                                    <com.google.android.material.textview.MaterialTextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/collector_module_motion_sensors_card_accelerometer_sensor_acceleration_x_label_name"
-                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
 
-                                    <com.google.android.material.textview.MaterialTextView
-                                        android:id="@+id/collector_module_motion_sensors_card_accelerometer_sensor_acceleration_x_value"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/collector_module_motion_sensors_card_accelerometer_sensor_timestamp_label_name"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
 
-                                </LinearLayout>
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:id="@+id/collector_module_motion_sensors_card_accelerometer_sensor_timestamp_value"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    </LinearLayout>
 
-                                    <com.google.android.material.textview.MaterialTextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/collector_module_motion_sensors_card_accelerometer_sensor_acceleration_y_label_name"
-                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
 
-                                    <com.google.android.material.textview.MaterialTextView
-                                        android:id="@+id/collector_module_motion_sensors_card_accelerometer_sensor_acceleration_y_value"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/collector_module_motion_sensors_card_accelerometer_sensor_acceleration_x_label_name"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
 
-                                </LinearLayout>
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:id="@+id/collector_module_motion_sensors_card_accelerometer_sensor_acceleration_x_value"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    </LinearLayout>
 
-                                    <com.google.android.material.textview.MaterialTextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/collector_module_motion_sensors_card_accelerometer_sensor_acceleration_z_label_name"
-                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
 
-                                    <com.google.android.material.textview.MaterialTextView
-                                        android:id="@+id/collector_module_motion_sensors_card_accelerometer_sensor_acceleration_z_value"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/collector_module_motion_sensors_card_accelerometer_sensor_acceleration_y_label_name"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:id="@+id/collector_module_motion_sensors_card_accelerometer_sensor_acceleration_y_value"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/collector_module_motion_sensors_card_accelerometer_sensor_acceleration_z_label_name"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:id="@+id/collector_module_motion_sensors_card_accelerometer_sensor_acceleration_z_value"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                    </LinearLayout>
 
                                 </LinearLayout>
 
@@ -310,8 +336,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:baselineAligned="false">
+                            android:baselineAligned="false"
+                            android:orientation="horizontal">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -348,8 +374,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:baselineAligned="false">
+                            android:baselineAligned="false"
+                            android:orientation="horizontal">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -367,8 +393,8 @@
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
                                 android:layout_weight="1.0"
+                                android:orientation="vertical"
                                 android:paddingTop="@dimen/sensor_card_single_spacing"
                                 android:paddingBottom="@dimen/sensor_card_single_spacing">
 
@@ -475,8 +501,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:baselineAligned="false">
+                            android:baselineAligned="false"
+                            android:orientation="horizontal">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -514,8 +540,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:baselineAligned="false">
+                            android:baselineAligned="false"
+                            android:orientation="horizontal">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -532,50 +558,76 @@
                             <LinearLayout
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
                                 android:layout_weight="1.0"
+                                android:orientation="vertical"
                                 android:paddingTop="@dimen/sensor_card_single_spacing"
                                 android:paddingBottom="@dimen/sensor_card_single_spacing">
 
                                 <com.google.android.material.textview.MaterialTextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="@string/collector_module_motion_sensors_card_pressure_sensor_subtitle_name"
+                                    android:text="@string/collector_module_environment_sensors_card_pressure_sensor_subtitle_name"
                                     android:textAppearance="?attr/textAppearanceTitleSmall" />
 
                                 <LinearLayout
+                                    android:id="@+id/collector_module_environment_sensors_card_pressure_sensor_info_layout"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
 
-                                    <com.google.android.material.textview.MaterialTextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/collector_module_motion_sensors_card_pressure_sensor_timestamp_label_name"
-                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
 
-                                    <com.google.android.material.textview.MaterialTextView
-                                        android:id="@+id/collector_module_motion_sensors_card_pressure_sensor_timestamp_value"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/collector_module_environment_sensors_card_pressure_sensor_name_label_name"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
 
-                                </LinearLayout>
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:id="@+id/collector_module_environment_sensors_card_pressure_sensor_name_value"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
 
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    </LinearLayout>
 
-                                    <com.google.android.material.textview.MaterialTextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="@string/collector_module_motion_sensors_card_pressure_sensor_pressure_label_name"
-                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
 
-                                    <com.google.android.material.textview.MaterialTextView
-                                        android:id="@+id/collector_module_motion_sensors_card_pressure_sensor_pressure_value"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textAppearance="?attr/textAppearanceLabelMedium" />
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/collector_module_environment_sensors_card_pressure_sensor_timestamp_label_name"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:id="@+id/collector_module_motion_sensors_card_pressure_sensor_timestamp_value"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@string/collector_module_environment_sensors_card_pressure_sensor_pressure_label_name"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                        <com.google.android.material.textview.MaterialTextView
+                                            android:id="@+id/collector_module_environment_sensors_card_pressure_sensor_pressure_value"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:textAppearance="?attr/textAppearanceLabelMedium" />
+
+                                    </LinearLayout>
 
                                 </LinearLayout>
 
@@ -599,8 +651,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false">
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -727,8 +779,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:baselineAligned="false">
+                        android:baselineAligned="false"
+                        android:orientation="horizontal">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -750,8 +802,8 @@
                             android:layout_weight="1.0"
                             android:orientation="vertical"
                             android:paddingTop="@dimen/sensor_card_single_spacing"
-                            android:paddingBottom="@dimen/sensor_card_single_spacing"
-                            android:paddingEnd="@dimen/sensor_card_single_spacing">
+                            android:paddingEnd="@dimen/sensor_card_single_spacing"
+                            android:paddingBottom="@dimen/sensor_card_single_spacing">
 
                             <com.google.android.material.textview.MaterialTextView
                                 android:layout_width="wrap_content"
