@@ -4,6 +4,7 @@ import android.hardware.SensorEvent;
 
 public class MotionSensors {
     private AccelerometerSensor accelerometerSensor;
+    private AccelerometerUncalibratedSensor accelerometerUncalibratedSensor;
     private GravitySensor gravitySensor;
     private GyroscopeSensor gyroscopeSensor;
     private GyroscopeUncalibratedSensor gyroscopeUncalibratedSensor;
@@ -12,6 +13,7 @@ public class MotionSensors {
 
     public MotionSensors() {
         accelerometerSensor = new AccelerometerSensor();
+        accelerometerUncalibratedSensor = new AccelerometerUncalibratedSensor();
         gravitySensor = new GravitySensor();
         gyroscopeSensor = new GyroscopeSensor();
         gyroscopeUncalibratedSensor = new GyroscopeUncalibratedSensor();
@@ -42,6 +44,31 @@ public class MotionSensors {
 
     public String getCsvFormattedAccelerometerSensorValues() {
         return accelerometerSensor.csvFormattedValues;
+    }
+
+    public AccelerometerUncalibratedSensor getAccelerometerUncalibratedSensor() {
+        return accelerometerUncalibratedSensor;
+    }
+
+    public void setAccelerometerUncalibratedSensor(AccelerometerUncalibratedSensor accelerometerUncalibratedSensor) {
+        this.accelerometerUncalibratedSensor = accelerometerUncalibratedSensor;
+    }
+
+    public void updateAccelerometerUncalibratedSensor(SensorEvent sensorEvent) {
+        accelerometerUncalibratedSensor.sensorEventUpdateSystemTimestamp = System.currentTimeMillis();
+        accelerometerUncalibratedSensor.sensorEventTimestamp = sensorEvent.timestamp;
+        accelerometerUncalibratedSensor.values = sensorEvent.values;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(accelerometerUncalibratedSensor.values[0]);
+        for (int i = 1; i < accelerometerUncalibratedSensor.valueCounts; i++) {
+            stringBuilder.append(", ");
+            stringBuilder.append(accelerometerUncalibratedSensor.values[i]);
+        }
+        accelerometerUncalibratedSensor.csvFormattedValues = stringBuilder.toString();
+    }
+
+    public String getCsvFormattedAccelerometerUncalibratedSensorValues() {
+        return accelerometerUncalibratedSensor.csvFormattedValues;
     }
 
     public GravitySensor getGravitySensor() {

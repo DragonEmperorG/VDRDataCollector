@@ -1,7 +1,7 @@
 package cn.edu.whu.lmars.unl.entity;
 
 public class GyroscopeUncalibratedSensor {
-    public int valueCounts = 3;
+    public int valueCounts = 6;
     public long sensorEventUpdateSystemTimestamp = 0L;
     public long sensorEventTimestamp = 0L;
     public float[] values = new float[valueCounts];

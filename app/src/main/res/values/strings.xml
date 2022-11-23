@@ -19,9 +19,39 @@
     <string name="collector_module_motion_sensors_card_accelerometer_sensor_acceleration_y_label_name">Acceleration Y:&#160;</string>
     <string name="collector_module_motion_sensors_card_accelerometer_sensor_acceleration_z_label_name">Acceleration Z:&#160;</string>
 
+    <string name="collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_subtitle_name">Accelerometer Uncalibrated Sensor</string>
+    <string name="collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_name_label_name">Name:&#160;</string>
+    <string name="collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_timestamp_label_name">Sensor Event Timestamp:&#160;</string>
+    <string name="collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_acceleration_x_label_name">Uncalibrated Acceleration X:&#160;</string>
+    <string name="collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_acceleration_y_label_name">Uncalibrated Acceleration Y:&#160;</string>
+    <string name="collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_acceleration_z_label_name">Uncalibrated Acceleration Z:&#160;</string>
+
+    <string name="collector_module_motion_sensors_card_gyroscope_sensor_subtitle_name">Gyroscope Sensor</string>
+    <string name="collector_module_motion_sensors_card_gyroscope_sensor_name_label_name">Name:&#160;</string>
+    <string name="collector_module_motion_sensors_card_gyroscope_sensor_timestamp_label_name">Sensor Event Timestamp:&#160;</string>
+    <string name="collector_module_motion_sensors_card_gyroscope_sensor_acceleration_x_label_name">Angular Acceleration X:&#160;</string>
+    <string name="collector_module_motion_sensors_card_gyroscope_sensor_acceleration_y_label_name">Angular Acceleration Y:&#160;</string>
+    <string name="collector_module_motion_sensors_card_gyroscope_sensor_acceleration_z_label_name">Angular Acceleration Z:&#160;</string>
+
+    <string name="collector_module_motion_sensors_card_gyroscope_uncalibrated_sensor_subtitle_name">Gyroscope Uncalibrated Sensor</string>
+    <string name="collector_module_motion_sensors_card_gyroscope_uncalibrated_sensor_name_label_name">Name:&#160;</string>
+    <string name="collector_module_motion_sensors_card_gyroscope_uncalibrated_sensor_timestamp_label_name">Sensor Event Timestamp:&#160;</string>
+    <string name="collector_module_motion_sensors_card_gyroscope_uncalibrated_sensor_acceleration_x_label_name">Uncalib Angular Acceleration X:&#160;</string>
+    <string name="collector_module_motion_sensors_card_gyroscope_uncalibrated_sensor_acceleration_y_label_name">Uncalib Angular Acceleration Y:&#160;</string>
+    <string name="collector_module_motion_sensors_card_gyroscope_uncalibrated_sensor_acceleration_z_label_name">Uncalib Angular Acceleration Z:&#160;</string>
+
     <string name="collector_module_position_sensors_choice_chip_name">Position sensors</string>
 
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_subtitle_name">Game Rotation Vector Sensor</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_name_label_name">Name:&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_timestamp_label_name">Sensor Event Timestamp:&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_x_label_name">X:&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_y_label_name">Y:&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_z_label_name">Z:&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_w_label_name">W:&#160;</string>
+
     <string name="collector_module_position_sensors_card_magnetic_sensor_subtitle_name">Magnetic Sensor</string>
+    <string name="collector_module_position_sensors_card_magnetic_sensor_name_label_name">Name:&#160;</string>
     <string name="collector_module_position_sensors_card_magnetic_sensor_timestamp_label_name">Sensor Event Timestamp:&#160;</string>
     <string name="collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_x_label_name">Strength X:&#160;</string>
     <string name="collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_y_label_name">Strength Y:&#160;</string>

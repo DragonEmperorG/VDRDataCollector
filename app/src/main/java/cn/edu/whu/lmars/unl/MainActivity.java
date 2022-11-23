@@ -31,10 +31,14 @@ import java.util.Date;
 import java.util.Locale;
 
 import cn.edu.whu.lmars.unl.entity.AccelerometerSensor;
+import cn.edu.whu.lmars.unl.entity.AccelerometerUncalibratedSensor;
 import cn.edu.whu.lmars.unl.entity.AlkaidSensor;
 import cn.edu.whu.lmars.unl.entity.AlkaidSensorPositionProto;
 import cn.edu.whu.lmars.unl.entity.EnvironmentSensors;
+import cn.edu.whu.lmars.unl.entity.GameRotationVectorSensor;
 import cn.edu.whu.lmars.unl.entity.GnssSensor;
+import cn.edu.whu.lmars.unl.entity.GyroscopeSensor;
+import cn.edu.whu.lmars.unl.entity.GyroscopeUncalibratedSensor;
 import cn.edu.whu.lmars.unl.entity.MagneticFieldSensor;
 import cn.edu.whu.lmars.unl.entity.MotionSensors;
 import cn.edu.whu.lmars.unl.entity.PositionSensors;
@@ -60,16 +64,38 @@ public class MainActivity extends AppCompatActivity {
     private boolean collectorModuleMotionSensorsCardCheckedValue;
     private boolean collectorModuleMotionSensorsCardCheckableValue;
     private MaterialCardView collectorModuleMotionSensorsCardView;
-    private MaterialTextView accelerometerSensorNameTextView;
+
     private MaterialTextView accelerometerSensorTimestampTextView;
     private MaterialTextView accelerometerSensorAccelerationXTextView;
     private MaterialTextView accelerometerSensorAccelerationYTextView;
     private MaterialTextView accelerometerSensorAccelerationZTextView;
 
+    private MaterialTextView accelerometerUncalibratedSensorTimestampTextView;
+    private MaterialTextView accelerometerUncalibratedSensorAccelerationXTextView;
+    private MaterialTextView accelerometerUncalibratedSensorAccelerationYTextView;
+    private MaterialTextView accelerometerUncalibratedSensorAccelerationZTextView;
+
+    private MaterialTextView gyroscopeSensorTimestampTextView;
+    private MaterialTextView gyroscopeSensorAccelerationXTextView;
+    private MaterialTextView gyroscopeSensorAccelerationYTextView;
+    private MaterialTextView gyroscopeSensorAccelerationZTextView;
+
+    private MaterialTextView gyroscopeUncalibratedSensorTimestampTextView;
+    private MaterialTextView gyroscopeUncalibratedSensorAccelerationXTextView;
+    private MaterialTextView gyroscopeUncalibratedSensorAccelerationYTextView;
+    private MaterialTextView gyroscopeUncalibratedSensorAccelerationZTextView;
+
 
     private boolean collectorModulePositionSensorsCardCheckedValue;
     private boolean collectorModulePositionSensorsCardCheckableValue;
     private MaterialCardView collectorModulePositionSensorsCardView;
+
+    private MaterialTextView gameRotationVectorSensorTimestampTextView;
+    private MaterialTextView gameRotationVectorSensorRotationVectorXTextView;
+    private MaterialTextView gameRotationVectorSensorRotationVectorYTextView;
+    private MaterialTextView gameRotationVectorSensorRotationVectorZTextView;
+    private MaterialTextView gameRotationVectorSensorRotationVectorWTextView;
+
     private MaterialTextView magneticSensorTimestampTextView;
     private MaterialTextView magneticSensorGeomagneticFieldStrengthXTextView;
     private MaterialTextView magneticSensorGeomagneticFieldStrengthYTextView;
@@ -210,19 +236,40 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             });
-
-            accelerometerSensorNameTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_name_value);
-            accelerometerSensorNameTextView.setText(sensorHelper.getSensorText(Sensor.TYPE_ACCELEROMETER));
-            accelerometerSensorTimestampTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_timestamp_value);
-            accelerometerSensorAccelerationXTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_x_value);
-            accelerometerSensorAccelerationYTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_y_value);
-            accelerometerSensorAccelerationZTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_z_value);
         } else {
             collectorModuleMotionSensorsCardView.setChecked(false);
             collectorModuleMotionSensorsCardView.setCheckable(false);
             LinearLayout linearLayout = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_info_layout);
             linearLayout.setVisibility(View.GONE);
         }
+
+        MaterialTextView accelerometerSensorNameTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_name_value);
+        accelerometerSensorNameTextView.setText(sensorHelper.getSensorText(Sensor.TYPE_ACCELEROMETER));
+        accelerometerSensorTimestampTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_timestamp_value);
+        accelerometerSensorAccelerationXTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_x_value);
+        accelerometerSensorAccelerationYTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_y_value);
+        accelerometerSensorAccelerationZTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_sensor_acceleration_z_value);
+
+        MaterialTextView accelerometerUncalibratedSensorNameTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_name_value);
+        accelerometerUncalibratedSensorNameTextView.setText(sensorHelper.getSensorText(Sensor.TYPE_ACCELEROMETER_UNCALIBRATED));
+        accelerometerUncalibratedSensorTimestampTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_timestamp_value);
+        accelerometerUncalibratedSensorAccelerationXTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_acceleration_x_value);
+        accelerometerUncalibratedSensorAccelerationYTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_acceleration_y_value);
+        accelerometerUncalibratedSensorAccelerationZTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_acceleration_z_value);
+
+        MaterialTextView gyroscopeSensorNameTextView = findViewById(R.id.collector_module_motion_sensors_card_gyroscope_sensor_name_value);
+        gyroscopeSensorNameTextView.setText(sensorHelper.getSensorText(Sensor.TYPE_GYROSCOPE));
+        gyroscopeSensorTimestampTextView = findViewById(R.id.collector_module_motion_sensors_card_gyroscope_sensor_timestamp_value);
+        gyroscopeSensorAccelerationXTextView = findViewById(R.id.collector_module_motion_sensors_card_gyroscope_sensor_acceleration_x_value);
+        gyroscopeSensorAccelerationYTextView = findViewById(R.id.collector_module_motion_sensors_card_gyroscope_sensor_acceleration_y_value);
+        gyroscopeSensorAccelerationZTextView = findViewById(R.id.collector_module_motion_sensors_card_gyroscope_sensor_acceleration_z_value);
+
+        MaterialTextView gyroscopeUncalibratedSensorNameTextView = findViewById(R.id.collector_module_motion_sensors_card_gyroscope_uncalibrated_sensor_name_value);
+        gyroscopeUncalibratedSensorNameTextView.setText(sensorHelper.getSensorText(Sensor.TYPE_GYROSCOPE_UNCALIBRATED));
+        gyroscopeUncalibratedSensorTimestampTextView = findViewById(R.id.collector_module_motion_sensors_card_gyroscope_uncalibrated_sensor_timestamp_value);
+        gyroscopeUncalibratedSensorAccelerationXTextView = findViewById(R.id.collector_module_motion_sensors_card_gyroscope_uncalibrated_sensor_acceleration_x_value);
+        gyroscopeUncalibratedSensorAccelerationYTextView = findViewById(R.id.collector_module_motion_sensors_card_gyroscope_uncalibrated_sensor_acceleration_y_value);
+        gyroscopeUncalibratedSensorAccelerationZTextView = findViewById(R.id.collector_module_motion_sensors_card_gyroscope_uncalibrated_sensor_acceleration_z_value);
 
     }
 
@@ -232,6 +279,33 @@ public class MainActivity extends AppCompatActivity {
             accelerometerSensorAccelerationXTextView.setText(String.valueOf(accelerometerSensor.values[0]));
             accelerometerSensorAccelerationYTextView.setText(String.valueOf(accelerometerSensor.values[1]));
             accelerometerSensorAccelerationZTextView.setText(String.valueOf(accelerometerSensor.values[2]));
+        });
+    }
+
+    void updateAccelerometerUncalibratedSensor(AccelerometerUncalibratedSensor accelerometerUncalibratedSensor) {
+        runOnUiThread(() -> {
+            accelerometerUncalibratedSensorTimestampTextView.setText(String.valueOf(accelerometerUncalibratedSensor.sensorEventTimestamp));
+            accelerometerUncalibratedSensorAccelerationXTextView.setText(String.valueOf(accelerometerUncalibratedSensor.values[0]));
+            accelerometerUncalibratedSensorAccelerationYTextView.setText(String.valueOf(accelerometerUncalibratedSensor.values[1]));
+            accelerometerUncalibratedSensorAccelerationZTextView.setText(String.valueOf(accelerometerUncalibratedSensor.values[2]));
+        });
+    }
+
+    void updateGyroscopeSensor(GyroscopeSensor gyroscopeSensor) {
+        runOnUiThread(() -> {
+            gyroscopeSensorTimestampTextView.setText(String.valueOf(gyroscopeSensor.sensorEventTimestamp));
+            gyroscopeSensorAccelerationXTextView.setText(String.valueOf(gyroscopeSensor.values[0]));
+            gyroscopeSensorAccelerationYTextView.setText(String.valueOf(gyroscopeSensor.values[1]));
+            gyroscopeSensorAccelerationZTextView.setText(String.valueOf(gyroscopeSensor.values[2]));
+        });
+    }
+
+    void updateGyroscopeUncalibratedSensor(GyroscopeUncalibratedSensor gyroscopeUncalibratedSensor) {
+        runOnUiThread(() -> {
+            gyroscopeUncalibratedSensorTimestampTextView.setText(String.valueOf(gyroscopeUncalibratedSensor.sensorEventTimestamp));
+            gyroscopeUncalibratedSensorAccelerationXTextView.setText(String.valueOf(gyroscopeUncalibratedSensor.values[0]));
+            gyroscopeUncalibratedSensorAccelerationYTextView.setText(String.valueOf(gyroscopeUncalibratedSensor.values[1]));
+            gyroscopeUncalibratedSensorAccelerationZTextView.setText(String.valueOf(gyroscopeUncalibratedSensor.values[2]));
         });
     }
 
@@ -248,10 +322,30 @@ public class MainActivity extends AppCompatActivity {
             return true;
         });
 
+        MaterialTextView gameRotationVectorSensorNameTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_name_value);
+        gameRotationVectorSensorNameTextView.setText(sensorHelper.getSensorText(Sensor.TYPE_GAME_ROTATION_VECTOR));
+        gameRotationVectorSensorTimestampTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_timestamp_value);
+        gameRotationVectorSensorRotationVectorXTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_x_value);
+        gameRotationVectorSensorRotationVectorYTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_y_value);
+        gameRotationVectorSensorRotationVectorZTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_z_value);
+        gameRotationVectorSensorRotationVectorWTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_w_value);
+
+        MaterialTextView magneticSensorNameTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_name_value);
+        magneticSensorNameTextView.setText(sensorHelper.getSensorText(Sensor.TYPE_MAGNETIC_FIELD));
         magneticSensorTimestampTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_timestamp_value);
         magneticSensorGeomagneticFieldStrengthXTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_x_value);
         magneticSensorGeomagneticFieldStrengthYTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_y_value);
         magneticSensorGeomagneticFieldStrengthZTextView = findViewById(R.id.collector_module_position_sensors_card_magnetic_sensor_geomagnetic_field_strength_z_value);
+    }
+
+    void updateGameRotationVectorSensor(GameRotationVectorSensor gameRotationVectorSensor) {
+        runOnUiThread(() -> {
+            gameRotationVectorSensorTimestampTextView.setText(String.valueOf(gameRotationVectorSensor.sensorEventTimestamp));
+            gameRotationVectorSensorRotationVectorXTextView.setText(String.valueOf(gameRotationVectorSensor.values[0]));
+            gameRotationVectorSensorRotationVectorYTextView.setText(String.valueOf(gameRotationVectorSensor.values[1]));
+            gameRotationVectorSensorRotationVectorZTextView.setText(String.valueOf(gameRotationVectorSensor.values[2]));
+            gameRotationVectorSensorRotationVectorWTextView.setText(String.valueOf(gameRotationVectorSensor.values[3]));
+        });
     }
 
     void updateMagneticSensor(MagneticFieldSensor magneticFieldSensor) {
@@ -468,6 +562,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (collectorModuleMotionSensorsCardCheckedValue) {
             selectedLogSensorsTypeList.add(Sensor.TYPE_ACCELEROMETER);
+            selectedLogSensorsTypeList.add(Sensor.TYPE_ACCELEROMETER_UNCALIBRATED);
             selectedLogSensorsTypeList.add(Sensor.TYPE_GRAVITY);
             selectedLogSensorsTypeList.add(Sensor.TYPE_GYROSCOPE);
             selectedLogSensorsTypeList.add(Sensor.TYPE_GYROSCOPE_UNCALIBRATED);
@@ -525,14 +620,27 @@ public class MainActivity extends AppCompatActivity {
             sensorsLoggerEngine.registerSensorsCollectionListener(sensorsCollection -> {
                 if (collectorModuleMotionSensorsCardCheckedValue) {
                     MotionSensors motionSensors = sensorsCollection.getMotionSensors();
+
                     AccelerometerSensor accelerometerSensor = motionSensors.getAccelerometerSensor();
                     updateAccelerometerSensor(accelerometerSensor);
+
+                    AccelerometerUncalibratedSensor accelerometerUncalibratedSensor = motionSensors.getAccelerometerUncalibratedSensor();
+                    updateAccelerometerUncalibratedSensor(accelerometerUncalibratedSensor);
+
+                    GyroscopeSensor gyroscope = motionSensors.getGyroscopeSensor();
+                    updateGyroscopeSensor(gyroscope);
+
+                    GyroscopeUncalibratedSensor gyroscopeUncalibratedSensor = motionSensors.getGyroscopeUncalibratedSensor();
+                    updateGyroscopeUncalibratedSensor(gyroscopeUncalibratedSensor);
                 }
 
                 if (collectorModulePositionSensorsCardCheckedValue) {
                     PositionSensors positionSensors = sensorsCollection.getPositionSensors();
                     MagneticFieldSensor magneticFieldSensor = positionSensors.getMagneticFieldSensor();
                     updateMagneticSensor(magneticFieldSensor);
+
+                    GameRotationVectorSensor gameRotationVectorSensor = positionSensors.getGameRotationVectorSensor();
+                    updateGameRotationVectorSensor(gameRotationVectorSensor);
                 }
                 if (collectorModuleEnvironmentSensorsCardCheckedValue) {
                     EnvironmentSensors environmentSensors = sensorsCollection.getEnvironmentSensors();

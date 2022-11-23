@@ -1,7 +1,5 @@
 package cn.edu.whu.lmars.unl.entity;
 
-import android.hardware.Sensor;
-
 public class AccelerometerSensor {
     public int valueCounts = 3;
     public long sensorEventUpdateSystemTimestamp = 0L;
