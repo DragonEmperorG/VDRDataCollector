@@ -45,10 +45,17 @@
     <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_subtitle_name">Game Rotation Vector Sensor</string>
     <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_name_label_name">Name:&#160;</string>
     <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_timestamp_label_name">Sensor Event Timestamp:&#160;</string>
-    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_x_label_name">X:&#160;</string>
-    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_y_label_name">Y:&#160;</string>
-    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_z_label_name">Z:&#160;</string>
-    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_w_label_name">W:&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_x_label_name">rv x:&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_y_label_name">rv y:&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_z_label_name">rv z:&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_w_label_name">rv w:&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_quaternion_w_label_name">q w&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_quaternion_x_label_name">q x:&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_quaternion_y_label_name">q y:&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_quaternion_z_label_name">q z:&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_heading_label_name">Heading:&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_attitude_label_name">Attitude:&#160;</string>
+    <string name="collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_bank_label_name">Bank:&#160;</string>
 
     <string name="collector_module_position_sensors_card_magnetic_sensor_subtitle_name">Magnetic Sensor</string>
     <string name="collector_module_position_sensors_card_magnetic_sensor_name_label_name">Name:&#160;</string>
