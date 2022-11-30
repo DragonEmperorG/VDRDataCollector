@@ -1,6 +1,9 @@
 package cn.edu.whu.lmars.unl.entity;
 
 import android.hardware.SensorEvent;
+import android.hardware.SensorManager;
+
+import cn.edu.whu.lmars.unl.util.Conversion;
 
 public class PositionSensors {
     private GameRotationVectorSensor gameRotationVectorSensor;
@@ -25,6 +28,13 @@ public class PositionSensors {
         gameRotationVectorSensor.sensorEventUpdateSystemTimestamp = System.currentTimeMillis();
         gameRotationVectorSensor.sensorEventTimestamp = sensorEvent.timestamp;
         gameRotationVectorSensor.values = sensorEvent.values;
+        
+        SensorManager.getRotationMatrixFromVector(gameRotationVectorSensor.rotationMatrix, gameRotationVectorSensor.values);
+
+//        SensorManager.getOrientation(gameRotationVectorSensor.rotationMatrix, gameRotationVectorSensor.eulerAngles);
+//        gameRotationVectorSensor.eulerAngles = Conversion.rads2Degrees(gameRotationVectorSensor.eulerAngles);
+
+        gameRotationVectorSensor.eulerAngles = Conversion.rotationVector2EulerAngleDegree(gameRotationVectorSensor.values);
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(gameRotationVectorSensor.values[0]);
         for (int i = 1; i < gameRotationVectorSensor.valueCounts; i++) {
