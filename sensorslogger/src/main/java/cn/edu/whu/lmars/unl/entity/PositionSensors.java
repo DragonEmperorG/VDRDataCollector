@@ -28,13 +28,7 @@ public class PositionSensors {
         gameRotationVectorSensor.sensorEventUpdateSystemTimestamp = System.currentTimeMillis();
         gameRotationVectorSensor.sensorEventTimestamp = sensorEvent.timestamp;
         gameRotationVectorSensor.values = sensorEvent.values;
-        
-        SensorManager.getRotationMatrixFromVector(gameRotationVectorSensor.rotationMatrix, gameRotationVectorSensor.values);
-
-//        SensorManager.getOrientation(gameRotationVectorSensor.rotationMatrix, gameRotationVectorSensor.eulerAngles);
-//        gameRotationVectorSensor.eulerAngles = Conversion.rads2Degrees(gameRotationVectorSensor.eulerAngles);
-
-        gameRotationVectorSensor.eulerAngles = Conversion.rotationVector2EulerAngleDegree(gameRotationVectorSensor.values);
+        gameRotationVectorSensor.eulerAngles = Conversion.rotationVectorToEulerAngleDegree(gameRotationVectorSensor.values);
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(gameRotationVectorSensor.values[0]);
         for (int i = 1; i < gameRotationVectorSensor.valueCounts; i++) {

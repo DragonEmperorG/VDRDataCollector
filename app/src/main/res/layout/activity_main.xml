@@ -1001,11 +1001,11 @@
                                     <com.google.android.material.textview.MaterialTextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@string/collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_heading_label_name"
+                                        android:text="@string/collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_azimuth_label_name"
                                         android:textAppearance="?attr/textAppearanceLabelMedium" />
 
                                     <com.google.android.material.textview.MaterialTextView
-                                        android:id="@+id/collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_heading_value"
+                                        android:id="@+id/collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_azimuth_value"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:textAppearance="?attr/textAppearanceLabelMedium" />
@@ -1019,11 +1019,11 @@
                                     <com.google.android.material.textview.MaterialTextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@string/collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_attitude_label_name"
+                                        android:text="@string/collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_pitch_label_name"
                                         android:textAppearance="?attr/textAppearanceLabelMedium" />
 
                                     <com.google.android.material.textview.MaterialTextView
-                                        android:id="@+id/collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_altitude_value"
+                                        android:id="@+id/collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_pitch_value"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:textAppearance="?attr/textAppearanceLabelMedium" />
@@ -1037,11 +1037,11 @@
                                     <com.google.android.material.textview.MaterialTextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@string/collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_bank_label_name"
+                                        android:text="@string/collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_roll_label_name"
                                         android:textAppearance="?attr/textAppearanceLabelMedium" />
 
                                     <com.google.android.material.textview.MaterialTextView
-                                        android:id="@+id/collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_bank_value"
+                                        android:id="@+id/collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_roll_value"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:textAppearance="?attr/textAppearanceLabelMedium" />
