@@ -95,10 +95,6 @@ public class MainActivity extends AppCompatActivity {
     private MaterialTextView gameRotationVectorSensorRotationVectorYTextView;
     private MaterialTextView gameRotationVectorSensorRotationVectorZTextView;
     private MaterialTextView gameRotationVectorSensorRotationVectorWTextView;
-    private MaterialTextView gameRotationVectorSensorQuaternionXTextView;
-    private MaterialTextView gameRotationVectorSensorQuaternionYTextView;
-    private MaterialTextView gameRotationVectorSensorQuaternionZTextView;
-    private MaterialTextView gameRotationVectorSensorQuaternionWTextView;
     private MaterialTextView gameRotationVectorSensorEulerAngleAzimuthTextView;
     private MaterialTextView gameRotationVectorSensorEulerAnglePitchTextView;
     private MaterialTextView gameRotationVectorSensorEulerAngleRollTextView;
@@ -336,10 +332,6 @@ public class MainActivity extends AppCompatActivity {
         gameRotationVectorSensorRotationVectorYTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_y_value);
         gameRotationVectorSensorRotationVectorZTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_z_value);
         gameRotationVectorSensorRotationVectorWTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_rotation_vector_w_value);
-        gameRotationVectorSensorQuaternionXTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_quaternion_x_value);
-        gameRotationVectorSensorQuaternionYTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_quaternion_y_value);
-        gameRotationVectorSensorQuaternionZTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_quaternion_z_value);
-        gameRotationVectorSensorQuaternionWTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_quaternion_w_value);
         gameRotationVectorSensorEulerAngleAzimuthTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_azimuth_value);
         gameRotationVectorSensorEulerAnglePitchTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_pitch_value);
         gameRotationVectorSensorEulerAngleRollTextView = findViewById(R.id.collector_module_position_sensors_card_game_rotation_vector_sensor_euler_angle_roll_value);
@@ -359,10 +351,6 @@ public class MainActivity extends AppCompatActivity {
             gameRotationVectorSensorRotationVectorYTextView.setText(String.valueOf(gameRotationVectorSensor.values[1]));
             gameRotationVectorSensorRotationVectorZTextView.setText(String.valueOf(gameRotationVectorSensor.values[2]));
             gameRotationVectorSensorRotationVectorWTextView.setText(String.valueOf(gameRotationVectorSensor.values[3]));
-//            gameRotationVectorSensorQuaternionXTextView.setText(String.valueOf(gameRotationVectorSensor.quaternions[1]));
-//            gameRotationVectorSensorQuaternionYTextView.setText(String.valueOf(gameRotationVectorSensor.quaternions[2]));
-//            gameRotationVectorSensorQuaternionZTextView.setText(String.valueOf(gameRotationVectorSensor.quaternions[3]));
-//            gameRotationVectorSensorQuaternionWTextView.setText(String.valueOf(gameRotationVectorSensor.quaternions[0]));
             gameRotationVectorSensorEulerAngleAzimuthTextView.setText(String.valueOf(gameRotationVectorSensor.eulerAngles[0]));
             gameRotationVectorSensorEulerAnglePitchTextView.setText(String.valueOf(gameRotationVectorSensor.eulerAngles[1]));
             gameRotationVectorSensorEulerAngleRollTextView.setText(String.valueOf(gameRotationVectorSensor.eulerAngles[2]));
