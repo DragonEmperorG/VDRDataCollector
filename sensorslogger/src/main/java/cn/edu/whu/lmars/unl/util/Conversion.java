@@ -26,6 +26,14 @@ public class Conversion {
         return rads;
     }
 
+    public static float[] rotateFromSensorCoordinateSystemToNavigationCoordinateSystem(float[] values, float[] quaternion) {
+        Quaternion rawQuaternion = new Quaternion(0, values[0], values[1], values[2]);
+        Quaternion rotation = new Quaternion(quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
+        Quaternion rotQuaternion = rotation.times(rawQuaternion).times(rotation.conjugate());
+        float[] rotValues = rotQuaternion.toArray();
+        return new float[] {rotValues[1], rotValues[2], rotValues[3]};
+    }
+
     public static float[] rotationVectorToEulerAngleDegree(float[] gameRotationVectorSensorValue) {
         /* 使用游戏旋转矢量传感器 坐标系和数值说明
          * https://developer.android.google.cn/guide/topics/sensors/sensors_position#sensors-pos-gamerot

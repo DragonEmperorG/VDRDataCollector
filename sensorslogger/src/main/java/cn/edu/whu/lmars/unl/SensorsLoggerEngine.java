@@ -57,6 +57,8 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
 
     private int alkaidSensorTriggerCounter = 0;
 
+    private int callbackTriggerCounter = 0;
+
     public SensorsLoggerEngine(Activity mainActivity) {
         rMainActivity= mainActivity;
         sensorsCollection = new SensorsCollection();
@@ -168,11 +170,7 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
                 vdrDataCollectorFileEngine.logSensorsCollection(sensorsCollection);
             }
 
-            if (alkaidSensorTriggerCounter == 200) {
-                if (sensorsCollectionListener != null) {
-                    sensorsCollectionListener.onSensorsCollectionUpdated(sensorsCollection);
-                }
-
+            if (alkaidSensorTriggerCounter >= 200) {
 
                 if (alkaidSensorsSwitcher) {
                     sensorsCollection.updateAlkaidValues();
@@ -181,6 +179,17 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
                 alkaidSensorTriggerCounter = 0;
             }
             alkaidSensorTriggerCounter++;
+
+            if (callbackTriggerCounter >= 20) {
+
+                if (sensorsCollectionListener != null) {
+                    sensorsCollectionListener.onSensorsCollectionUpdated(sensorsCollection);
+                }
+
+                callbackTriggerCounter = 0;
+            }
+            callbackTriggerCounter++;
+
 //            Log.d(TAG, "loop update: " + System.currentTimeMillis());
         }
     }

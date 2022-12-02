@@ -28,6 +28,7 @@ public class PositionSensors {
         gameRotationVectorSensor.sensorEventUpdateSystemTimestamp = System.currentTimeMillis();
         gameRotationVectorSensor.sensorEventTimestamp = sensorEvent.timestamp;
         gameRotationVectorSensor.values = sensorEvent.values;
+        SensorManager.getQuaternionFromVector(gameRotationVectorSensor.quaternion, gameRotationVectorSensor.values);
         gameRotationVectorSensor.eulerAngles = Conversion.rotationVectorToEulerAngleDegree(gameRotationVectorSensor.values);
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(gameRotationVectorSensor.values[0]);

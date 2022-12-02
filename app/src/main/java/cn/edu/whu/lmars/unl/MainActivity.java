@@ -74,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
     private MaterialTextView accelerometerUncalibratedSensorAccelerationXTextView;
     private MaterialTextView accelerometerUncalibratedSensorAccelerationYTextView;
     private MaterialTextView accelerometerUncalibratedSensorAccelerationZTextView;
+    private MaterialTextView accelerometerUncalibratedSensorRotatedAccelerationXTextView;
+    private MaterialTextView accelerometerUncalibratedSensorRotatedAccelerationYTextView;
+    private MaterialTextView accelerometerUncalibratedSensorRotatedAccelerationZTextView;
 
     private MaterialTextView gyroscopeSensorTimestampTextView;
     private MaterialTextView gyroscopeSensorAccelerationXTextView;
@@ -259,6 +262,9 @@ public class MainActivity extends AppCompatActivity {
         accelerometerUncalibratedSensorAccelerationXTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_acceleration_x_value);
         accelerometerUncalibratedSensorAccelerationYTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_acceleration_y_value);
         accelerometerUncalibratedSensorAccelerationZTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_acceleration_z_value);
+        accelerometerUncalibratedSensorRotatedAccelerationXTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_rotated_acceleration_x_value);
+        accelerometerUncalibratedSensorRotatedAccelerationYTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_rotated_acceleration_y_value);
+        accelerometerUncalibratedSensorRotatedAccelerationZTextView = findViewById(R.id.collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_rotated_acceleration_z_value);
 
         MaterialTextView gyroscopeSensorNameTextView = findViewById(R.id.collector_module_motion_sensors_card_gyroscope_sensor_name_value);
         gyroscopeSensorNameTextView.setText(sensorHelper.getSensorText(Sensor.TYPE_GYROSCOPE));
@@ -291,6 +297,9 @@ public class MainActivity extends AppCompatActivity {
             accelerometerUncalibratedSensorAccelerationXTextView.setText(String.valueOf(accelerometerUncalibratedSensor.values[0]));
             accelerometerUncalibratedSensorAccelerationYTextView.setText(String.valueOf(accelerometerUncalibratedSensor.values[1]));
             accelerometerUncalibratedSensorAccelerationZTextView.setText(String.valueOf(accelerometerUncalibratedSensor.values[2]));
+            accelerometerUncalibratedSensorRotatedAccelerationXTextView.setText(String.valueOf(accelerometerUncalibratedSensor.rotatedValues[0]));
+            accelerometerUncalibratedSensorRotatedAccelerationYTextView.setText(String.valueOf(accelerometerUncalibratedSensor.rotatedValues[1]));
+            accelerometerUncalibratedSensorRotatedAccelerationZTextView.setText(String.valueOf(accelerometerUncalibratedSensor.rotatedValues[2]));
         });
     }
 

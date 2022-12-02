@@ -70,7 +70,8 @@ public class SensorsCollection {
                 break;
             case Sensor.TYPE_ACCELEROMETER_UNCALIBRATED:
 //                Log.d(TAG, "updateSensorsValues: Sensor.TYPE_ACCELEROMETER_UNCALIBRATED: " + sensorEvent.sensor.getName());
-                motionSensors.updateAccelerometerUncalibratedSensor(sensorEvent);
+                // motionSensors.updateAccelerometerUncalibratedSensor(sensorEvent);
+                motionSensors.updateAccelerometerUncalibratedSensor(sensorEvent, positionSensors.getGameRotationVectorSensor());
                 break;
             case Sensor.TYPE_GRAVITY:
 //                Log.d(TAG, "updateSensorsValues: Sensor.TYPE_GRAVITY: " + sensorEvent.sensor.getName());

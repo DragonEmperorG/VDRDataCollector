@@ -25,6 +25,9 @@
     <string name="collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_acceleration_x_label_name">Uncalibrated Acceleration X:&#160;</string>
     <string name="collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_acceleration_y_label_name">Uncalibrated Acceleration Y:&#160;</string>
     <string name="collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_acceleration_z_label_name">Uncalibrated Acceleration Z:&#160;</string>
+    <string name="collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_rotated_acceleration_x_label_name">Rotated Uncalib Acceleration X:&#160;</string>
+    <string name="collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_rotated_acceleration_y_label_name">Rotated Uncalib Acceleration Y:&#160;</string>
+    <string name="collector_module_motion_sensors_card_accelerometer_uncalibrated_sensor_rotated_acceleration_z_label_name">Rotated Uncalib Acceleration Z:&#160;</string>
 
     <string name="collector_module_motion_sensors_card_gyroscope_sensor_subtitle_name">Gyroscope Sensor</string>
     <string name="collector_module_motion_sensors_card_gyroscope_sensor_name_label_name">Name:&#160;</string>
