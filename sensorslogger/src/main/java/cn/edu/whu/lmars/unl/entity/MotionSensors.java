@@ -78,13 +78,13 @@ public class MotionSensors {
     public void updateAccelerometerUncalibratedSensor(SensorEvent sensorEvent, GameRotationVectorSensor gameRotationVectorSensor) {
         updateAccelerometerUncalibratedSensor(sensorEvent);
         accelerometerUncalibratedSensor.rotatedValues = Conversion.rotateFromSensorCoordinateSystemToNavigationCoordinateSystem(accelerometerUncalibratedSensor.values, gameRotationVectorSensor.quaternion);
-        StringBuilder stringBuilder;
-        stringBuilder = new StringBuilder();
-        stringBuilder.append(String.format(Locale.CHINA,"% 6.3f", accelerometerUncalibratedSensor.values[0]));
-        stringBuilder.append(", ");
-        stringBuilder.append(String.format(Locale.CHINA,"% 6.3f", accelerometerUncalibratedSensor.rotatedValues[0]));
-
-        Log.d(TAG, "updateAccelerometerUncalibratedSensor: " + stringBuilder);
+//        StringBuilder stringBuilder;
+//        stringBuilder = new StringBuilder();
+//        stringBuilder.append(String.format(Locale.CHINA,"% 6.3f", accelerometerUncalibratedSensor.values[0]));
+//        stringBuilder.append(", ");
+//        stringBuilder.append(String.format(Locale.CHINA,"% 6.3f", accelerometerUncalibratedSensor.rotatedValues[0]));
+//
+//        Log.d(TAG, "updateAccelerometerUncalibratedSensor: " + stringBuilder);
     }
 
     public String getCsvFormattedAccelerometerUncalibratedSensorValues() {

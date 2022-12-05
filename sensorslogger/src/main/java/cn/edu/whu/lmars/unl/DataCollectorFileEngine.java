@@ -1,12 +1,18 @@
 package cn.edu.whu.lmars.unl;
 
+
 import android.app.Activity;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.os.Build;
 import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import cn.edu.whu.lmars.unl.entity.SensorsCollection;
@@ -28,6 +34,77 @@ public class DataCollectorFileEngine extends Thread {
         File dataCollectorFile = getFile(mainActivity, "VdrExperimentData", ".csv");
         try {
             dataCollectorFileOutputStream = new FileOutputStream(dataCollectorFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        logDeviceData(mainActivity);
+        logDeviceSensorsData(mainActivity);
+    }
+
+    private void logDeviceData(Activity mainActivity) {
+        File deviceDataFile = getFile(mainActivity, "DeviceData", ".csv");
+        try {
+            FileOutputStream deviceDataFileOutputStream = new FileOutputStream(deviceDataFile);
+            StringBuilder stringBuilder;
+            stringBuilder = new StringBuilder();
+            stringBuilder.append("Manufacturer");
+            stringBuilder.append(", ").append("Model");
+            stringBuilder.append("\n");
+            stringBuilder.append(Build.MANUFACTURER);
+            stringBuilder.append(", ").append(Build.MODEL);
+            deviceDataFileOutputStream.write(stringBuilder.toString().getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void logDeviceSensorsData(Activity mainActivity) {
+        SensorManager sensorManager = (SensorManager) mainActivity.getSystemService(Context.SENSOR_SERVICE);
+        List<Sensor> sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL);
+        int sensorListSize = sensorList.size();
+
+        File deviceDataFile = getFile(mainActivity, "DeviceSensorsData", ".csv");
+        try {
+            FileOutputStream deviceDataFileOutputStream = new FileOutputStream(deviceDataFile);
+            StringBuilder stringBuilder;
+            stringBuilder = new StringBuilder();
+            stringBuilder.append("name");
+            stringBuilder.append(", ").append("vendor");
+            stringBuilder.append(", ").append("version");
+            stringBuilder.append(", ").append("type");
+            stringBuilder.append(", ").append("stringType");
+            stringBuilder.append(", ").append("maxRange");
+            stringBuilder.append(", ").append("resolution");
+            stringBuilder.append(", ").append("power");
+            stringBuilder.append(", ").append("maxDelay");
+            stringBuilder.append(", ").append("minDelay");
+
+            for (int i = 0; i < sensorListSize; i++) {
+                Sensor sensor = sensorList.get(i);
+                stringBuilder.append("\n");
+                stringBuilder.append(sensor.getName());
+                stringBuilder.append(", ").append(sensor.getVendor());
+                stringBuilder.append(", ").append(sensor.getVersion());
+                stringBuilder.append(", ").append(sensor.getType());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+                    stringBuilder.append(", ").append(sensor.getStringType());
+                } else {
+                    stringBuilder.append(", ").append("");
+                }
+                stringBuilder.append(", ").append(sensor.getMaximumRange());
+                stringBuilder.append(", ").append(sensor.getResolution());
+                stringBuilder.append(", ").append(sensor.getPower());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    stringBuilder.append(", ").append(sensor.getMaxDelay());
+                } else {
+                    stringBuilder.append(", ").append("");
+                }
+                stringBuilder.append(", ").append(sensor.getMinDelay());
+
+            }
+
+            deviceDataFileOutputStream.write(stringBuilder.toString().getBytes());
         } catch (Exception e) {
             e.printStackTrace();
         }
