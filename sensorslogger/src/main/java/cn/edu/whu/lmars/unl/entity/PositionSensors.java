@@ -8,11 +8,13 @@ import cn.edu.whu.lmars.unl.util.Conversion;
 public class PositionSensors {
     private GameRotationVectorSensor gameRotationVectorSensor;
     private MagneticFieldSensor magneticFieldSensor;
+    private MagneticFieldUncalibratedSensor magneticFieldUncalibratedSensor;
     private OrientationSensor orientationSensor;
 
     public PositionSensors() {
         gameRotationVectorSensor = new GameRotationVectorSensor();
         magneticFieldSensor = new MagneticFieldSensor();
+        magneticFieldUncalibratedSensor = new MagneticFieldUncalibratedSensor();
         orientationSensor = new OrientationSensor();
     }
 
@@ -66,6 +68,31 @@ public class PositionSensors {
 
     public String getCsvFormattedMagneticFieldSensorValues() {
         return magneticFieldSensor.csvFormattedValues;
+    }
+
+    public MagneticFieldUncalibratedSensor getMagneticFieldUncalibratedSensor() {
+        return magneticFieldUncalibratedSensor;
+    }
+
+    public void setMagneticFieldUncalibratedSensor(MagneticFieldUncalibratedSensor magneticFieldUncalibratedSensor) {
+        this.magneticFieldUncalibratedSensor = magneticFieldUncalibratedSensor;
+    }
+
+    public void updateMagneticFieldUncalibratedSensor(SensorEvent sensorEvent) {
+        magneticFieldUncalibratedSensor.sensorEventUpdateSystemTimestamp = System.currentTimeMillis();
+        magneticFieldUncalibratedSensor.sensorEventTimestamp = sensorEvent.timestamp;
+        magneticFieldUncalibratedSensor.values = sensorEvent.values;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(magneticFieldUncalibratedSensor.values[0]);
+        for (int i = 1; i < magneticFieldUncalibratedSensor.valueCounts; i++) {
+            stringBuilder.append(", ");
+            stringBuilder.append(magneticFieldUncalibratedSensor.values[i]);
+        }
+        magneticFieldUncalibratedSensor.csvFormattedValues = stringBuilder.toString();
+    }
+
+    public String getCsvFormattedMagneticFieldUncalibratedSensorValues() {
+        return magneticFieldUncalibratedSensor.csvFormattedValues;
     }
 
     public OrientationSensor getOrientationSensor() {

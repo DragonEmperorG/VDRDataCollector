@@ -101,6 +101,10 @@ public class SensorsCollection {
 //                Log.d(TAG, "updateSensorsValues: Sensor.TYPE_MAGNETIC_FIELD: " + sensorEvent.sensor.getName());
                 positionSensors.updateMagneticFieldSensor(sensorEvent);
                 break;
+            case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
+//                Log.d(TAG, "updateSensorsValues: Sensor.TYPE_MAGNETIC_FIELD: " + sensorEvent.sensor.getName());
+                positionSensors.updateMagneticFieldUncalibratedSensor(sensorEvent);
+                break;
             case Sensor.TYPE_ORIENTATION:
 //                Log.d(TAG, "updateSensorsValues: Sensor.TYPE_ORIENTATION: " + sensorEvent.sensor.getName());
                 positionSensors.updateOrientationSensor(sensorEvent);
@@ -141,6 +145,7 @@ public class SensorsCollection {
         stringBuilder.append(", ").append(motionSensors.getCsvFormattedGyroscopeUncalibratedSensorValues());
         stringBuilder.append(", ").append(positionSensors.getCsvFormattedOrientationSensorValues());
         stringBuilder.append(", ").append(positionSensors.getCsvFormattedMagneticFieldSensorValues());
+        stringBuilder.append(", ").append(positionSensors.getCsvFormattedMagneticFieldUncalibratedSensorValues());
         stringBuilder.append(", ").append(motionSensors.getCsvFormattedGravitySensorValues());
         stringBuilder.append(", ").append(motionSensors.getCsvFormattedLinearAccelerationSensorValues());
         stringBuilder.append(", ").append(environmentSensors.getCsvFormattedPressureSensorValues());

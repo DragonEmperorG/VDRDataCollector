@@ -12,6 +12,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
+import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import cn.edu.whu.lmars.unl.entity.SensorsCollection;
 import cn.edu.whu.lmars.unl.listener.SensorsCollectionListener;
@@ -135,9 +137,17 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onSensorChanged(SensorEvent event) {
+        // https://stackoverflow.com/questions/5500765/accelerometer-sensorevent-timestamp
+        long systemCurrentTimeMillis = System.currentTimeMillis();
+        long systemClockElapsedRealtimeMillis = SystemClock.elapsedRealtimeNanos();
+
         sensorsCollection.updateSensorsValues(event);
+        if (fileLoggerSwitcher) {
+            vdrDataCollectorFileEngine.logSensorEvent(systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, event);
+        }
     }
 
     @Override

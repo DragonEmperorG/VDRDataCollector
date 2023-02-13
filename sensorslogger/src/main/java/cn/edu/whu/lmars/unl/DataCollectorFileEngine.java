@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.hardware.Sensor;
+import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
 import android.os.Build;
 import android.util.Log;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 
 import cn.edu.whu.lmars.unl.entity.SensorsCollection;
+import cn.edu.whu.lmars.unl.util.FileUtil;
 
 public class DataCollectorFileEngine extends Thread {
 
@@ -29,21 +31,54 @@ public class DataCollectorFileEngine extends Thread {
 
     private FileOutputStream dataCollectorFileOutputStream = null;
 
+    private FileOutputStream sensorGyroscopeFileOutputStream = null;
+
+    private FileOutputStream sensorGyroscopeUncalibratedFileOutputStream = null;
+
+    private FileOutputStream sensorAccelerometerFileOutputStream = null;
+
+    private FileOutputStream sensorAccelerometerUncalibratedFileOutputStream = null;
+
+    private FileOutputStream sensorMagneticFieldFileOutputStream = null;
+
+    private FileOutputStream sensorMagneticFieldUncalibratedFileOutputStream = null;
+
     public DataCollectorFileEngine(Activity mainActivity, String loggerFolderName) {
         dataCollectorFolderName = loggerFolderName;
-        File dataCollectorFile = getFile(mainActivity, "VdrExperimentData", ".csv");
+
+        batchInitialSensorFileOutputStream(mainActivity, loggerFolderName);
+
+        logDeviceData(mainActivity, loggerFolderName);
+        logDeviceSensorsData(mainActivity, loggerFolderName);
+    }
+
+    private void batchInitialSensorFileOutputStream(Activity mainActivity, String loggerFolderName) {
         try {
-            dataCollectorFileOutputStream = new FileOutputStream(dataCollectorFile);
+            dataCollectorFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "VdrExperimentData", ".csv");
+            sensorGyroscopeFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "MotionSensorGyroscope", ".csv");
+            sensorGyroscopeUncalibratedFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "MotionSensorGyroscopeUncalibrated", ".csv");
+            sensorAccelerometerFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "MotionSensorAccelerometer", ".csv");
+            sensorAccelerometerUncalibratedFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "MotionSensorAccelerometerUncalibrated", ".csv");
+            sensorMagneticFieldFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "PositionSensorMagneticField", ".csv");
+            sensorMagneticFieldUncalibratedFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "PositionSensorMagneticFieldUncalibrated", ".csv");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private FileOutputStream initialSensorFileOutputStream(Activity mainActivity, String loggerFolderName, String fileName, String extension) {
+        File mFile = FileUtil.getFile(mainActivity, loggerFolderName, fileName, extension);
+        try {
+            return new FileOutputStream(mFile);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        logDeviceData(mainActivity);
-        logDeviceSensorsData(mainActivity);
+        return null;
     }
 
-    private void logDeviceData(Activity mainActivity) {
-        File deviceDataFile = getFile(mainActivity, "DeviceData", ".csv");
+    private void logDeviceData(Activity mainActivity, String loggerFolderName) {
+        File deviceDataFile = FileUtil.getFile(mainActivity, loggerFolderName, "DeviceData", ".csv");
         try {
             FileOutputStream deviceDataFileOutputStream = new FileOutputStream(deviceDataFile);
             StringBuilder stringBuilder;
@@ -59,12 +94,12 @@ public class DataCollectorFileEngine extends Thread {
         }
     }
 
-    private void logDeviceSensorsData(Activity mainActivity) {
+    private void logDeviceSensorsData(Activity mainActivity, String loggerFolderName) {
         SensorManager sensorManager = (SensorManager) mainActivity.getSystemService(Context.SENSOR_SERVICE);
         List<Sensor> sensorList = sensorManager.getSensorList(Sensor.TYPE_ALL);
         int sensorListSize = sensorList.size();
 
-        File deviceDataFile = getFile(mainActivity, "DeviceSensorsData", ".csv");
+        File deviceDataFile = FileUtil.getFile(mainActivity, loggerFolderName, "DeviceSensorsData", ".csv");
         try {
             FileOutputStream deviceDataFileOutputStream = new FileOutputStream(deviceDataFile);
             StringBuilder stringBuilder;
@@ -118,6 +153,12 @@ public class DataCollectorFileEngine extends Thread {
         dataCollectorFileEngineStatus = 0;
         try {
             dataCollectorFileOutputStream.close();
+            sensorGyroscopeFileOutputStream.close();
+            sensorGyroscopeUncalibratedFileOutputStream.close();
+            sensorAccelerometerFileOutputStream.close();
+            sensorAccelerometerUncalibratedFileOutputStream.close();
+            sensorMagneticFieldFileOutputStream.close();
+            sensorMagneticFieldUncalibratedFileOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -131,31 +172,31 @@ public class DataCollectorFileEngine extends Thread {
         }
     }
 
-    private File getFile(Context context, String fileName, String extension) {
-
-        File directory = new File(context.getExternalFilesDir(null), "VdrLMARS" + "/" + dataCollectorFolderName);
-        if (!directory.exists()) {
-            boolean directoryCreationStatus = directory.mkdirs();
-            Log.i(TAG, "directoryCreationStatus: " + directoryCreationStatus);
+    public void logSensorEvent(long systemCurrentTimeMillis, long systemClockElapsedRealtimeMillis, SensorEvent sensorEvent) {
+        final Sensor eventSensor = sensorEvent.sensor;
+        final int eventSensorType = eventSensor.getType();
+        switch (eventSensorType) {
+            case Sensor.TYPE_ACCELEROMETER:
+                FileUtil.writeSensorEvent(sensorAccelerometerFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, sensorEvent);
+                break;
+            case Sensor.TYPE_ACCELEROMETER_UNCALIBRATED:
+                FileUtil.writeSensorEvent(sensorAccelerometerUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, sensorEvent);
+                break;
+            case Sensor.TYPE_GYROSCOPE:
+                FileUtil.writeSensorEvent(sensorGyroscopeFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, sensorEvent);
+                break;
+            case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
+                FileUtil.writeSensorEvent(sensorGyroscopeUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, sensorEvent);
+                break;
+            case Sensor.TYPE_MAGNETIC_FIELD:
+                FileUtil.writeSensorEvent(sensorMagneticFieldFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, sensorEvent);
+                break;
+            case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
+                FileUtil.writeSensorEvent(sensorMagneticFieldUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, sensorEvent);
+                break;
+            default:
+                break;
         }
-
-        File file = new File(directory, fileName + extension);
-
-        if (file.exists()) {
-            boolean deletionStatus = file.delete();
-            Log.i(TAG, "File already exists, delete it first, deletionStatus: " + deletionStatus);
-        }
-
-        if (!file.exists()) {
-            try {
-                boolean deletionStatus = file.createNewFile();
-                Log.i(TAG, "fileCreationStatus: " + deletionStatus);
-            } catch (Exception e) {
-                Log.i(TAG, "createNewFile failed: " + e.toString());
-            }
-        }
-
-        return file;
     }
 
     @Override
@@ -176,4 +217,5 @@ public class DataCollectorFileEngine extends Thread {
             }
         }
     }
+
 }

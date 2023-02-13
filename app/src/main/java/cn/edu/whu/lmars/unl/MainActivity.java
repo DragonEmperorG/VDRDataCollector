@@ -1,6 +1,7 @@
 package cn.edu.whu.lmars.unl;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -9,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -575,6 +577,7 @@ public class MainActivity extends AppCompatActivity {
         collectorModuleAlkaidSensorsCardView.setCheckable(collectorModuleAlkaidSensorsCardCheckableValue);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private ArrayList<Integer> getSelectedLogSensorsTypeList() {
         ArrayList<Integer> selectedLogSensorsTypeList = new ArrayList<>();
 
@@ -591,6 +594,7 @@ public class MainActivity extends AppCompatActivity {
         if (collectorModulePositionSensorsCardCheckedValue) {
             selectedLogSensorsTypeList.add(Sensor.TYPE_GAME_ROTATION_VECTOR);
             selectedLogSensorsTypeList.add(Sensor.TYPE_MAGNETIC_FIELD);
+            selectedLogSensorsTypeList.add(Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED);
             selectedLogSensorsTypeList.add(Sensor.TYPE_ORIENTATION);
         }
 
@@ -700,7 +704,7 @@ public class MainActivity extends AppCompatActivity {
         collectorModuleButtonStartCollect = findViewById(R.id.collector_module_button_start_collect);
         collectorModuleButtonStartCollect.setOnClickListener(view -> {
             logFolderName = String.valueOf(collectorModuleLogFolderNameEditText.getText());
-            sensorsLoggerEngine.startLogger(getDefaultTimeStamp4Folder() + "_" + logFolderName);
+            sensorsLoggerEngine.startLogger(logFolderName);
 
             disableCollectorModuleButtonCloseSensors();
             disableCollectorModuleButtonStartCollect();
