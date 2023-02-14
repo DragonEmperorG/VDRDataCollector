@@ -45,6 +45,7 @@ import cn.edu.whu.lmars.unl.entity.MagneticFieldSensor;
 import cn.edu.whu.lmars.unl.entity.MotionSensors;
 import cn.edu.whu.lmars.unl.entity.PositionSensors;
 import cn.edu.whu.lmars.unl.entity.PressureSensor;
+import cn.edu.whu.lmars.unl.util.FileUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -148,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
     private SensorHelper sensorHelper;
     private SensorsLoggerEngine sensorsLoggerEngine;
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -626,6 +628,7 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void initView() {
 
         collectorModuleButtonOpenSensors = findViewById(R.id.collector_module_button_open_sensors);
@@ -718,6 +721,8 @@ public class MainActivity extends AppCompatActivity {
             disableCollectorModuleButtonStopCollect();
             enableCollectorModuleButtonStartCollect();
             enableCollectorModuleButtonCloseSensors();
+
+            collectorModuleLogFolderNameEditText.setText(FileUtil.getNextSequenceFormatName(MainActivity.this));
         });
 
         ENABLE_MATERIAL_BUTTON_BACKGROUND = collectorModuleButtonOpenSensors.getBackground();
@@ -735,6 +740,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     return false;
                 });
+        collectorModuleLogFolderNameEditText.setText(FileUtil.getNextSequenceFormatName(MainActivity.this));
 
         initMotionSensorsCard();
         initPositionSensorsCard();

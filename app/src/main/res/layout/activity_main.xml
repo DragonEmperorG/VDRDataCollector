@@ -77,7 +77,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="4dp"
-                    android:hint="@string/collector_module_mission_name_setting_text_field_hint_value">
+                    android:hint="@string/collector_module_mission_name_setting_text_field_hint_value"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true" >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
