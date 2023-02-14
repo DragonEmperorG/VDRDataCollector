@@ -66,7 +66,7 @@ public class DataCollectorFileEngine extends Thread {
             sensorAccelerometerUncalibratedFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "MotionSensorAccelerometerUncalibrated", ".csv");
             sensorMagneticFieldFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "PositionSensorMagneticField", ".csv");
             sensorMagneticFieldUncalibratedFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "PositionSensorMagneticFieldUncalibrated", ".csv");
-            sensorMagneticFieldUncalibratedFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "GNSS", ".csv");
+            sensorGNSSFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "GNSS", ".csv");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -165,7 +165,7 @@ public class DataCollectorFileEngine extends Thread {
             sensorAccelerometerUncalibratedFileOutputStream.close();
             sensorMagneticFieldFileOutputStream.close();
             sensorMagneticFieldUncalibratedFileOutputStream.close();
-            sensorMagneticFieldUncalibratedFileOutputStream.close();
+            sensorGNSSFileOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -206,7 +206,8 @@ public class DataCollectorFileEngine extends Thread {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void logSensorGNSS(long systemCurrentTimeMillis, long systemClockElapsedRealtimeMillis, Location location) {
         FileUtil.writeSensorGNSS(sensorGNSSFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, location);
     }
