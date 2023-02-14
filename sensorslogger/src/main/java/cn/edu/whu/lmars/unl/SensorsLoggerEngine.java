@@ -145,6 +145,7 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
         long systemClockElapsedRealtimeMillis = SystemClock.elapsedRealtimeNanos();
 
         sensorsCollection.updateSensorsValues(event);
+
         if (fileLoggerSwitcher) {
             vdrDataCollectorFileEngine.logSensorEvent(systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, event);
         }
@@ -163,7 +164,14 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
 //        stringBuilder.append(", ").append(location.getLongitude());
 //        stringBuilder.append(", ").append(location.getLatitude());
 //        Log.d(TAG, "onLocationChanged: " + stringBuilder);
+        long systemCurrentTimeMillis = System.currentTimeMillis();
+        long systemClockElapsedRealtimeMillis = SystemClock.elapsedRealtimeNanos();
+
         sensorsCollection.updateLocationValues(location);
+
+        if (fileLoggerSwitcher) {
+            vdrDataCollectorFileEngine.logSensorGNSS(systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, location);
+        }
     }
 
     @Override

@@ -3,7 +3,11 @@ package cn.edu.whu.lmars.unl.util;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
+import android.location.Location;
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -83,6 +87,32 @@ public class FileUtil {
             stringBuilder.append(", ");
             stringBuilder.append(sensorEventValues[i]);
         }
+        stringBuilder.append("\n");
+        try {
+            fileOutputStream.write(stringBuilder.toString().getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static void writeSensorGNSS(FileOutputStream fileOutputStream, long systemCurrentTimeMillis, long systemClockElapsedRealtimeMillis, Location location) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(systemCurrentTimeMillis);
+        stringBuilder.append(", ").append(systemClockElapsedRealtimeMillis);
+        stringBuilder.append(", ").append(location.getTime());
+        stringBuilder.append(", ").append(location.getElapsedRealtimeNanos());
+        stringBuilder.append(", ").append(location.getLongitude());
+        stringBuilder.append(", ").append(location.getLatitude());
+        stringBuilder.append(", ").append(location.getAltitude());
+        stringBuilder.append(", ").append(location.getAccuracy());
+        stringBuilder.append(", ").append(location.getVerticalAccuracyMeters());
+        stringBuilder.append(", ").append(location.getSpeed());
+        stringBuilder.append(", ").append(location.getSpeedAccuracyMetersPerSecond());
+        stringBuilder.append(", ").append(location.getBearing());
+        stringBuilder.append(", ").append(location.getBearingAccuracyDegrees());
+        stringBuilder.append(", ").append(location.getProvider());
         stringBuilder.append("\n");
         try {
             fileOutputStream.write(stringBuilder.toString().getBytes());
