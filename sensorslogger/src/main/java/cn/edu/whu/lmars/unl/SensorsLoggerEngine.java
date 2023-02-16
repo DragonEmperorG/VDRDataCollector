@@ -8,62 +8,69 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.location.GnssClock;
+import android.location.GnssMeasurementsEvent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Vector;
 
 import cn.edu.whu.lmars.unl.entity.SensorsCollection;
 import cn.edu.whu.lmars.unl.listener.SensorsCollectionListener;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class SensorsLoggerEngine extends Thread implements SensorEventListener, LocationListener {
 
     private static final String TAG = "SensorsLoggerEngine";
 
     public static final int SENSOR_TYPE_GNSS = 2020;
-
     public static final int SENSOR_TYPE_ALKAID = 2022;
-
-    private final Activity rMainActivity;
-
-    private SensorsLoggerEngineOption cSensorsLoggerEngineOption;
-    
     private final int SENSOR_DELAY_CONFIG = SensorManager.SENSOR_DELAY_FASTEST; // 1000Hz
-//    private final int SENSOR_DELAY_CONFIG = SensorManager.SENSOR_DELAY_GAME; // 100Hz
+    // private final int SENSOR_DELAY_CONFIG = SensorManager.SENSOR_DELAY_GAME; // 100Hz
 
-    private SensorManager sensorManager;
-
-    private LocationManager locationManager;
-
-    private boolean fileLoggerSwitcher = false;
-
-    private boolean alkaidSensorsSwitcher = false;
-
+    /**
+     * Sensor Manager
+     **/
     private int sensorsLoggerEngineStatus = 0;
+    private final Activity rMainActivity;
+    private SensorsLoggerEngineOption cSensorsLoggerEngineOption;
+    private SensorManager sensorManager;
+    private LocationManager locationManager;
+    /**
+     * Alkaid Sensor
+     **/
+    private boolean alkaidSensorsSwitcher = false;
+    private int alkaidSensorTriggerCounter = 0;
 
     private SensorsCollection sensorsCollection;
-
     private SensorsCollectionListener sensorsCollectionListener = null;
 
+    private boolean fileLoggerSwitcher = false;
     private DataCollectorFileEngine vdrDataCollectorFileEngine;
 
-    private int alkaidSensorTriggerCounter = 0;
+    /**
+     * USed in Clock Correction
+     **/
+    private boolean gnssClockReferenceBiasSetFlag = false;
+    private final int OFFSET_NANOS_WINDOW_SIZE = 30;
+    private long gnssClockFullBiasNanos = 0L;
+    private double gnssClockBiasNanos = 1.0e-9;
+    private long localGnssClockAverageOffsetNanos = 0;
+    Vector<Long> localGnssClockOffsetNanosWindow = new Vector();
 
     private int callbackTriggerCounter = 0;
 
     public SensorsLoggerEngine(Activity mainActivity) {
-        rMainActivity= mainActivity;
+        rMainActivity = mainActivity;
         sensorsCollection = new SensorsCollection();
     }
 
@@ -94,6 +101,8 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
             locationManager = (LocationManager) rMainActivity.getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates
                     (LocationManager.GPS_PROVIDER, 0, 0, this);
+            locationManager.registerGnssMeasurementsCallback(gnssMeasurementsEventListener);
+
             logSensorsTypeList.remove(Integer.valueOf(SENSOR_TYPE_GNSS));
         }
 
@@ -120,6 +129,7 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
             vdrDataCollectorFileEngine.stopLogFile();
         }
         sensorManager.unregisterListener(this);
+        locationManager.unregisterGnssMeasurementsCallback(gnssMeasurementsEventListener);
         locationManager.removeUpdates(this);
     }
 
@@ -138,17 +148,17 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
     @Override
     public void onSensorChanged(SensorEvent event) {
         // https://stackoverflow.com/questions/5500765/accelerometer-sensorevent-timestamp
         long systemCurrentTimeMillis = System.currentTimeMillis();
         long systemClockElapsedRealtimeMillis = SystemClock.elapsedRealtimeNanos();
+        long localGnssClockOffsetNanos = localGnssClockAverageOffsetNanos;
 
         sensorsCollection.updateSensorsValues(event);
 
         if (fileLoggerSwitcher) {
-            vdrDataCollectorFileEngine.logSensorEvent(systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, event);
+            vdrDataCollectorFileEngine.logSensorEvent(systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, localGnssClockOffsetNanos, event);
         }
     }
 
@@ -166,17 +176,21 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
 //        stringBuilder.append(", ").append(location.getLatitude());
 //        Log.d(TAG, "onLocationChanged: " + stringBuilder);
         long systemCurrentTimeMillis = System.currentTimeMillis();
-        long systemClockElapsedRealtimeMillis = SystemClock.elapsedRealtimeNanos();
+        long systemClockElapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos();
+        long localGnssClockOffsetNanos = localGnssClockAverageOffsetNanos;
 
         sensorsCollection.updateLocationValues(location);
 
         if (fileLoggerSwitcher) {
-            vdrDataCollectorFileEngine.logSensorGNSS(systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, location);
+            vdrDataCollectorFileEngine.logSensorGnssLocation(systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockOffsetNanos, location);
         }
     }
 
+    // https://stackoverflow.com/questions/64638260/android-locationlistener-abstractmethoderror-on-onstatuschanged-and-onproviderd/64643361#64643361
     @Deprecated
-    public void onStatusChanged(String provider, int status, Bundle extras) {}
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
 
     @Override
     public void onProviderEnabled(@NonNull String provider) {
@@ -187,6 +201,66 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
     public void onProviderDisabled(@NonNull String provider) {
 
     }
+
+    private final GnssMeasurementsEvent.Callback gnssMeasurementsEventListener =
+            new GnssMeasurementsEvent.Callback() {
+                @Override
+                public void onGnssMeasurementsReceived(GnssMeasurementsEvent gnssMeasurementsEvent) {
+                    long systemCurrentTimeMillis = System.currentTimeMillis();
+                    long systemClockElapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos();
+
+                    GnssClock gnssClock = gnssMeasurementsEvent.getClock();
+
+                    /* maintaining constant the 'FullBiasNanos' instead of using the instantaneous value. This avoids the 256 ns
+                     jumps each 3 seconds that create a code-phase
+                     divergence due to the clock. */
+                    if (!gnssClockReferenceBiasSetFlag) {
+                        // https://developer.android.google.cn/reference/android/location/GnssClock#getFullBiasNanos()
+                        gnssClockFullBiasNanos = gnssClock.getFullBiasNanos();
+                        gnssClockBiasNanos = gnssClock.getBiasNanos();
+                        gnssClockReferenceBiasSetFlag = true;
+                    }
+
+                    // https://home.csis.u-tokyo.ac.jp/~dinesh/GNSS_Raw_files/GNSS%20102%20Measurements%20from%20Phones%20Short%20Course%20Slides.pdf
+                    double gnssClockLocalEstimateGpsTimeNanos = gnssClock.getTimeNanos() - (gnssClockFullBiasNanos + gnssClockBiasNanos);
+                    long localEstimateGpsTimeNanos = (long) gnssClockLocalEstimateGpsTimeNanos;
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        if (gnssClock.hasElapsedRealtimeNanos()) {
+                            systemClockElapsedRealtimeNanos = gnssClock.getElapsedRealtimeNanos();
+                        }
+                    }
+
+                    long localGnssClockOffsetNanos = localEstimateGpsTimeNanos - systemClockElapsedRealtimeNanos;
+                    localGnssClockOffsetNanosWindow.add(localGnssClockOffsetNanos);
+
+                    int statisticsCounter = 0;
+                    long statisticsMovingAverageOffsetNanosSummer = 0;
+                    if (localGnssClockOffsetNanosWindow.size() >= OFFSET_NANOS_WINDOW_SIZE) {
+                        for (int i = localGnssClockOffsetNanosWindow.size() - OFFSET_NANOS_WINDOW_SIZE; i < localGnssClockOffsetNanosWindow.size(); i++) {
+                            statisticsMovingAverageOffsetNanosSummer = statisticsMovingAverageOffsetNanosSummer + (localGnssClockOffsetNanosWindow.get(i) - localGnssClockOffsetNanosWindow.get(localGnssClockOffsetNanosWindow.size() - OFFSET_NANOS_WINDOW_SIZE));
+                            statisticsCounter = statisticsCounter + 1;
+                        }
+                        localGnssClockAverageOffsetNanos = statisticsMovingAverageOffsetNanosSummer / statisticsCounter + localGnssClockOffsetNanosWindow.get(localGnssClockOffsetNanosWindow.size() - OFFSET_NANOS_WINDOW_SIZE);
+                        localGnssClockOffsetNanosWindow.remove(0);
+                    } else {
+                        for (int i = 0; i < localGnssClockOffsetNanosWindow.size(); i++) {
+                            statisticsMovingAverageOffsetNanosSummer = statisticsMovingAverageOffsetNanosSummer + (localGnssClockOffsetNanosWindow.get(i) - localGnssClockOffsetNanosWindow.get(0));
+                            statisticsCounter = statisticsCounter + 1;
+                        }
+                        localGnssClockAverageOffsetNanos = statisticsMovingAverageOffsetNanosSummer / statisticsCounter + localGnssClockOffsetNanosWindow.get(0);
+                    }
+
+                    if (fileLoggerSwitcher) {
+                        vdrDataCollectorFileEngine.logSensorGnssMeasurement(systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockAverageOffsetNanos, gnssMeasurementsEvent);
+                    }
+                }
+
+                @Override
+                public void onStatusChanged(int status) {
+
+                }
+            };
 
     @Override
     public void run() {

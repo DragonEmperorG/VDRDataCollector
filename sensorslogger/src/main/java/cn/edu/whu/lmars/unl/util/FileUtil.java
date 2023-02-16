@@ -1,13 +1,13 @@
 package cn.edu.whu.lmars.unl.util;
 
 import android.content.Context;
-import android.hardware.Sensor;
 import android.hardware.SensorEvent;
+import android.location.GnssClock;
+import android.location.GnssMeasurement;
+import android.location.GnssMeasurementsEvent;
 import android.location.Location;
 import android.os.Build;
 import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -76,13 +76,14 @@ public class FileUtil {
         return file;
     }
 
-    public static void writeSensorEvent(FileOutputStream fileOutputStream, long systemCurrentTimeMillis, long systemClockElapsedRealtimeMillis, SensorEvent sensorEvent) {
+    public static void writeSensorEvent(FileOutputStream fileOutputStream, long systemCurrentTimeMillis, long systemClockElapsedRealtimeMillis, long localGnssClockOffsetNanos, SensorEvent sensorEvent) {
         long sensorEventTimestamp = sensorEvent.timestamp;
         float[] sensorEventValues = sensorEvent.values;
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(systemCurrentTimeMillis);
         stringBuilder.append(", ").append(systemClockElapsedRealtimeMillis);
         stringBuilder.append(", ").append(sensorEventTimestamp);
+        stringBuilder.append(", ").append(localGnssClockOffsetNanos);
         for (int i = 0; i < sensorEventValues.length; i++) {
             stringBuilder.append(", ");
             stringBuilder.append(sensorEventValues[i]);
@@ -95,24 +96,84 @@ public class FileUtil {
         }
     }
 
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public static void writeSensorGNSS(FileOutputStream fileOutputStream, long systemCurrentTimeMillis, long systemClockElapsedRealtimeMillis, Location location) {
+    public static void writeSensorGnssLocation(FileOutputStream fileOutputStream, long systemCurrentTimeMillis, long systemClockElapsedRealtimeNanos, long localGnssClockOffsetNanos, Location location) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(systemCurrentTimeMillis);
-        stringBuilder.append(", ").append(systemClockElapsedRealtimeMillis);
+        stringBuilder.append(", ").append(systemClockElapsedRealtimeNanos);
+        stringBuilder.append(", ").append(localGnssClockOffsetNanos);
         stringBuilder.append(", ").append(location.getTime());
-        stringBuilder.append(", ").append(location.getElapsedRealtimeNanos());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            stringBuilder.append(", ").append(location.getElapsedRealtimeNanos());
+        } else {
+            stringBuilder.append(", ").append("");
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            stringBuilder.append(", ").append(location.getElapsedRealtimeUncertaintyNanos());
+        } else {
+            stringBuilder.append(", ").append("");
+        }
         stringBuilder.append(", ").append(location.getLongitude());
         stringBuilder.append(", ").append(location.getLatitude());
         stringBuilder.append(", ").append(location.getAltitude());
         stringBuilder.append(", ").append(location.getAccuracy());
-        stringBuilder.append(", ").append(location.getVerticalAccuracyMeters());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            stringBuilder.append(", ").append(location.getVerticalAccuracyMeters());
+        } else {
+            stringBuilder.append(", ").append("");
+        }
         stringBuilder.append(", ").append(location.getSpeed());
-        stringBuilder.append(", ").append(location.getSpeedAccuracyMetersPerSecond());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            stringBuilder.append(", ").append(location.getSpeedAccuracyMetersPerSecond());
+        } else {
+            stringBuilder.append(", ").append("");
+        }
         stringBuilder.append(", ").append(location.getBearing());
-        stringBuilder.append(", ").append(location.getBearingAccuracyDegrees());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            stringBuilder.append(", ").append(location.getBearingAccuracyDegrees());
+        } else {
+            stringBuilder.append(", ").append("");
+        }
         stringBuilder.append(", ").append(location.getProvider());
+        stringBuilder.append("\n");
+        try {
+            fileOutputStream.write(stringBuilder.toString().getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void writeSensorGnssMeasurement(FileOutputStream fileOutputStream, long systemCurrentTimeMillis, long systemClockElapsedRealtimeNanos, long localGnssClockOffsetNanos, GnssMeasurementsEvent gnssMeasurementsEvent) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(systemCurrentTimeMillis);
+        stringBuilder.append(", ").append(systemClockElapsedRealtimeNanos);
+        stringBuilder.append(", ").append(localGnssClockOffsetNanos);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            GnssClock gnssClock = gnssMeasurementsEvent.getClock();
+            stringBuilder.append(", ").append(gnssClock.getTimeNanos());
+            stringBuilder.append(", ").append(gnssClock.getTimeUncertaintyNanos());
+            stringBuilder.append(", ").append(gnssClock.getFullBiasNanos());
+            stringBuilder.append(", ").append(gnssClock.getBiasNanos());
+            stringBuilder.append(", ").append(gnssClock.getBiasUncertaintyNanos());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                stringBuilder.append(", ").append(gnssClock.getElapsedRealtimeNanos());
+            } else {
+                stringBuilder.append(", ").append("");
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                stringBuilder.append(", ").append(gnssClock.getElapsedRealtimeUncertaintyNanos());
+            } else {
+                stringBuilder.append(", ").append("");
+            }
+            stringBuilder.append(", ").append(gnssClock.getLeapSecond());
+            stringBuilder.append(", ").append(gnssClock.getDriftNanosPerSecond());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                stringBuilder.append(", ").append(gnssClock.getElapsedRealtimeUncertaintyNanos());
+            } else {
+                stringBuilder.append(", ").append("");
+            }
+        }
+
         stringBuilder.append("\n");
         try {
             fileOutputStream.write(stringBuilder.toString().getBytes());

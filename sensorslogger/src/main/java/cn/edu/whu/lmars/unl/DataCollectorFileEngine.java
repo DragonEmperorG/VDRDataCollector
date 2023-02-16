@@ -2,16 +2,14 @@ package cn.edu.whu.lmars.unl;
 
 
 import android.app.Activity;
-import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
+import android.location.GnssMeasurement;
+import android.location.GnssMeasurementsEvent;
 import android.location.Location;
 import android.os.Build;
-import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -33,20 +31,14 @@ public class DataCollectorFileEngine extends Thread {
     private ArrayBlockingQueue<SensorsCollection> logSensorsCollectionQueue = new ArrayBlockingQueue(1000);
 
     private FileOutputStream dataCollectorFileOutputStream = null;
-
     private FileOutputStream sensorGyroscopeFileOutputStream = null;
-
     private FileOutputStream sensorGyroscopeUncalibratedFileOutputStream = null;
-
     private FileOutputStream sensorAccelerometerFileOutputStream = null;
-
     private FileOutputStream sensorAccelerometerUncalibratedFileOutputStream = null;
-
     private FileOutputStream sensorMagneticFieldFileOutputStream = null;
-
     private FileOutputStream sensorMagneticFieldUncalibratedFileOutputStream = null;
-
-    private FileOutputStream sensorGNSSFileOutputStream = null;
+    private FileOutputStream sensorGnssLocationFileOutputStream = null;
+    private FileOutputStream sensorGnssMeasurementFileOutputStream = null;
 
     public DataCollectorFileEngine(Activity mainActivity, String loggerFolderName) {
         dataCollectorFolderName = loggerFolderName;
@@ -66,7 +58,8 @@ public class DataCollectorFileEngine extends Thread {
             sensorAccelerometerUncalibratedFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "MotionSensorAccelerometerUncalibrated", ".csv");
             sensorMagneticFieldFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "PositionSensorMagneticField", ".csv");
             sensorMagneticFieldUncalibratedFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "PositionSensorMagneticFieldUncalibrated", ".csv");
-            sensorGNSSFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "GNSS", ".csv");
+            sensorGnssLocationFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "GnssLocation", ".csv");
+            sensorGnssMeasurementFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "GnssMeasurement", ".csv");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -165,7 +158,8 @@ public class DataCollectorFileEngine extends Thread {
             sensorAccelerometerUncalibratedFileOutputStream.close();
             sensorMagneticFieldFileOutputStream.close();
             sensorMagneticFieldUncalibratedFileOutputStream.close();
-            sensorGNSSFileOutputStream.close();
+            sensorGnssLocationFileOutputStream.close();
+            sensorGnssMeasurementFileOutputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -179,37 +173,39 @@ public class DataCollectorFileEngine extends Thread {
         }
     }
 
-    public void logSensorEvent(long systemCurrentTimeMillis, long systemClockElapsedRealtimeMillis, SensorEvent sensorEvent) {
+    public void logSensorEvent(long systemCurrentTimeMillis, long systemClockElapsedRealtimeMillis, long localGnssClockOffsetNanos, SensorEvent sensorEvent) {
         final Sensor eventSensor = sensorEvent.sensor;
         final int eventSensorType = eventSensor.getType();
         switch (eventSensorType) {
             case Sensor.TYPE_ACCELEROMETER:
-                FileUtil.writeSensorEvent(sensorAccelerometerFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, sensorEvent);
+                FileUtil.writeSensorEvent(sensorAccelerometerFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, localGnssClockOffsetNanos, sensorEvent);
                 break;
             case Sensor.TYPE_ACCELEROMETER_UNCALIBRATED:
-                FileUtil.writeSensorEvent(sensorAccelerometerUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, sensorEvent);
+                FileUtil.writeSensorEvent(sensorAccelerometerUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, localGnssClockOffsetNanos, sensorEvent);
                 break;
             case Sensor.TYPE_GYROSCOPE:
-                FileUtil.writeSensorEvent(sensorGyroscopeFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, sensorEvent);
+                FileUtil.writeSensorEvent(sensorGyroscopeFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, localGnssClockOffsetNanos, sensorEvent);
                 break;
             case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
-                FileUtil.writeSensorEvent(sensorGyroscopeUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, sensorEvent);
+                FileUtil.writeSensorEvent(sensorGyroscopeUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, localGnssClockOffsetNanos, sensorEvent);
                 break;
             case Sensor.TYPE_MAGNETIC_FIELD:
-                FileUtil.writeSensorEvent(sensorMagneticFieldFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, sensorEvent);
+                FileUtil.writeSensorEvent(sensorMagneticFieldFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, localGnssClockOffsetNanos, sensorEvent);
                 break;
             case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
-                FileUtil.writeSensorEvent(sensorMagneticFieldUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, sensorEvent);
+                FileUtil.writeSensorEvent(sensorMagneticFieldUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, localGnssClockOffsetNanos, sensorEvent);
                 break;
             default:
                 break;
         }
     }
 
+    public void logSensorGnssLocation(long systemCurrentTimeMillis, long systemClockElapsedRealtimeNanos, long localGnssClockOffsetNanos, Location location) {
+        FileUtil.writeSensorGnssLocation(sensorGnssLocationFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockOffsetNanos, location);
+    }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void logSensorGNSS(long systemCurrentTimeMillis, long systemClockElapsedRealtimeMillis, Location location) {
-        FileUtil.writeSensorGNSS(sensorGNSSFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, location);
+    public void logSensorGnssMeasurement(long systemCurrentTimeMillis, long systemClockElapsedRealtimeNanos, long localGnssClockOffsetNanos, GnssMeasurementsEvent gnssMeasurementsEvent) {
+        FileUtil.writeSensorGnssMeasurement(sensorGnssLocationFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockOffsetNanos, gnssMeasurementsEvent);
     }
 
     @Override
