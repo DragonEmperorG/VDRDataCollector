@@ -76,14 +76,14 @@ public class FileUtil {
         return file;
     }
 
-    public static void writeSensorEvent(FileOutputStream fileOutputStream, long systemCurrentTimeMillis, long systemClockElapsedRealtimeMillis, long localGnssClockOffsetNanos, SensorEvent sensorEvent) {
+    public static void writeSensorEvent(FileOutputStream fileOutputStream, long systemCurrentTimeMillis, long systemClockElapsedRealtimeNanos, long localGnssClockOffsetNanos, SensorEvent sensorEvent) {
         long sensorEventTimestamp = sensorEvent.timestamp;
         float[] sensorEventValues = sensorEvent.values;
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(systemCurrentTimeMillis);
-        stringBuilder.append(", ").append(systemClockElapsedRealtimeMillis);
-        stringBuilder.append(", ").append(sensorEventTimestamp);
+        stringBuilder.append(", ").append(systemClockElapsedRealtimeNanos);
         stringBuilder.append(", ").append(localGnssClockOffsetNanos);
+        stringBuilder.append(", ").append(sensorEventTimestamp);
         for (int i = 0; i < sensorEventValues.length; i++) {
             stringBuilder.append(", ");
             stringBuilder.append(sensorEventValues[i]);

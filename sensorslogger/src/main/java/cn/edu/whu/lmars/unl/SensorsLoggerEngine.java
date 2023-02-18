@@ -152,13 +152,14 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
     public void onSensorChanged(SensorEvent event) {
         // https://stackoverflow.com/questions/5500765/accelerometer-sensorevent-timestamp
         long systemCurrentTimeMillis = System.currentTimeMillis();
-        long systemClockElapsedRealtimeMillis = SystemClock.elapsedRealtimeNanos();
+        long systemNanoTime = System.nanoTime();
+        long systemClockElapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos();
         long localGnssClockOffsetNanos = localGnssClockAverageOffsetNanos;
 
         sensorsCollection.updateSensorsValues(event);
 
         if (fileLoggerSwitcher) {
-            vdrDataCollectorFileEngine.logSensorEvent(systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, localGnssClockOffsetNanos, event);
+            vdrDataCollectorFileEngine.logSensorEvent(systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockOffsetNanos, event);
         }
     }
 
