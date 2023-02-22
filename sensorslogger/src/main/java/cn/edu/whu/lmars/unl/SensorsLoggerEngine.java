@@ -16,6 +16,7 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -151,9 +152,18 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
     @Override
     public void onSensorChanged(SensorEvent event) {
         // https://stackoverflow.com/questions/5500765/accelerometer-sensorevent-timestamp
+        long systemClockElapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos();
         long systemCurrentTimeMillis = System.currentTimeMillis();
         long systemNanoTime = System.nanoTime();
-        long systemClockElapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos();
+
+//        long systemClockElapsedRealtime = SystemClock.elapsedRealtime();
+//        long systemClockElapsedRealtimeNanosMinus = systemClockElapsedRealtimeNanos - systemClockElapsedRealtime * 1000000;
+//        if (systemClockElapsedRealtimeNanosMinus >= 1000000) {
+//            Log.e(TAG, "onSensorChanged: " + systemClockElapsedRealtimeNanosMinus);
+//        } else {
+//            Log.d(TAG, "onSensorChanged: " + systemClockElapsedRealtimeNanosMinus);
+//        }
+
         long localGnssClockOffsetNanos = localGnssClockAverageOffsetNanos;
 
         sensorsCollection.updateSensorsValues(event);
@@ -176,8 +186,8 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
 //        stringBuilder.append(", ").append(location.getLongitude());
 //        stringBuilder.append(", ").append(location.getLatitude());
 //        Log.d(TAG, "onLocationChanged: " + stringBuilder);
-        long systemCurrentTimeMillis = System.currentTimeMillis();
         long systemClockElapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos();
+        long systemCurrentTimeMillis = System.currentTimeMillis();        
         long localGnssClockOffsetNanos = localGnssClockAverageOffsetNanos;
 
         sensorsCollection.updateLocationValues(location);
@@ -207,8 +217,8 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
             new GnssMeasurementsEvent.Callback() {
                 @Override
                 public void onGnssMeasurementsReceived(GnssMeasurementsEvent gnssMeasurementsEvent) {
-                    long systemCurrentTimeMillis = System.currentTimeMillis();
                     long systemClockElapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos();
+                    long systemCurrentTimeMillis = System.currentTimeMillis();
 
                     GnssClock gnssClock = gnssMeasurementsEvent.getClock();
 
