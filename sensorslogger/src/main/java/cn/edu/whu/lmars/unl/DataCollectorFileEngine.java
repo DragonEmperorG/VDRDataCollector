@@ -173,27 +173,27 @@ public class DataCollectorFileEngine extends Thread {
         }
     }
 
-    public void logSensorEvent(long systemCurrentTimeMillis, long systemClockElapsedRealtimeMillis, long localGnssClockOffsetNanos, SensorEvent sensorEvent) {
+    public void logSensorEvent(long systemCurrentTimeMillis, long systemClockElapsedRealtimeNanos, long localGnssClockOffsetNanos, SensorEvent sensorEvent) {
         final Sensor eventSensor = sensorEvent.sensor;
         final int eventSensorType = eventSensor.getType();
         switch (eventSensorType) {
             case Sensor.TYPE_ACCELEROMETER:
-                FileUtil.writeSensorEvent(sensorAccelerometerFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, localGnssClockOffsetNanos, sensorEvent);
+                FileUtil.writeSensorEvent(sensorAccelerometerFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockOffsetNanos, sensorEvent);
                 break;
             case Sensor.TYPE_ACCELEROMETER_UNCALIBRATED:
-                FileUtil.writeSensorEvent(sensorAccelerometerUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, localGnssClockOffsetNanos, sensorEvent);
+                FileUtil.writeSensorEvent(sensorAccelerometerUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockOffsetNanos, sensorEvent);
                 break;
             case Sensor.TYPE_GYROSCOPE:
-                FileUtil.writeSensorEvent(sensorGyroscopeFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, localGnssClockOffsetNanos, sensorEvent);
+                FileUtil.writeSensorEvent(sensorGyroscopeFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockOffsetNanos, sensorEvent);
                 break;
             case Sensor.TYPE_GYROSCOPE_UNCALIBRATED:
-                FileUtil.writeSensorEvent(sensorGyroscopeUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, localGnssClockOffsetNanos, sensorEvent);
+                FileUtil.writeSensorEvent(sensorGyroscopeUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockOffsetNanos, sensorEvent);
                 break;
             case Sensor.TYPE_MAGNETIC_FIELD:
-                FileUtil.writeSensorEvent(sensorMagneticFieldFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, localGnssClockOffsetNanos, sensorEvent);
+                FileUtil.writeSensorEvent(sensorMagneticFieldFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockOffsetNanos, sensorEvent);
                 break;
             case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
-                FileUtil.writeSensorEvent(sensorMagneticFieldUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeMillis, localGnssClockOffsetNanos, sensorEvent);
+                FileUtil.writeSensorEvent(sensorMagneticFieldUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockOffsetNanos, sensorEvent);
                 break;
             default:
                 break;
@@ -205,7 +205,7 @@ public class DataCollectorFileEngine extends Thread {
     }
 
     public void logSensorGnssMeasurement(long systemCurrentTimeMillis, long systemClockElapsedRealtimeNanos, long localGnssClockOffsetNanos, GnssMeasurementsEvent gnssMeasurementsEvent) {
-        FileUtil.writeSensorGnssMeasurement(sensorGnssLocationFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockOffsetNanos, gnssMeasurementsEvent);
+        FileUtil.writeSensorGnssMeasurement(sensorGnssMeasurementFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockOffsetNanos, gnssMeasurementsEvent);
     }
 
     @Override
