@@ -84,9 +84,14 @@ public class DataCollectorFileEngine extends Thread {
             stringBuilder = new StringBuilder();
             stringBuilder.append("Manufacturer");
             stringBuilder.append(", ").append("Model");
+            stringBuilder.append(", ").append("Android");
+            stringBuilder.append(", ").append("API");
             stringBuilder.append("\n");
             stringBuilder.append(Build.MANUFACTURER);
             stringBuilder.append(", ").append(Build.MODEL);
+            stringBuilder.append(", ").append(Build.MODEL);
+            stringBuilder.append(", ").append(Build.VERSION.RELEASE);
+            stringBuilder.append(", ").append(Build.VERSION.SDK_INT);
             deviceDataFileOutputStream.write(stringBuilder.toString().getBytes());
         } catch (Exception e) {
             e.printStackTrace();
