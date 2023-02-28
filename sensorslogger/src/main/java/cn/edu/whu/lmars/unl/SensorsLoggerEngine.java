@@ -65,7 +65,7 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
     private final int OFFSET_NANOS_WINDOW_SIZE = 30;
     private long gnssClockFullBiasNanos = 0L;
     private double gnssClockBiasNanos = 1.0e-9;
-    private long localGnssClockAverageOffsetNanos = 0;
+    private long localGnssClockAverageOffsetNanos = 0L;
     Vector<Long> localGnssClockOffsetNanosWindow = new Vector();
 
     private int callbackTriggerCounter = 0;
@@ -155,6 +155,18 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
         long systemClockElapsedRealtimeNanos = SystemClock.elapsedRealtimeNanos();
         long systemCurrentTimeMillis = System.currentTimeMillis();
         long systemNanoTime = System.nanoTime();
+
+//        long systemClockCurrentGnssTimeClock = 0;
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+//            systemClockCurrentGnssTimeClock = SystemClock.currentGnssTimeClock().millis();
+//        }
+
+//        StringBuilder stringBuilder;
+//        stringBuilder = new StringBuilder();
+//        stringBuilder.append(systemCurrentTimeMillis);
+//        stringBuilder.append(", ").append(systemClockCurrentGnssTimeClock);
+//        stringBuilder.append(", ").append(systemCurrentTimeMillis - systemClockCurrentGnssTimeClock);
+//        Log.d(TAG, "onSensorChanged: " + stringBuilder);
 
 //        long systemClockElapsedRealtime = SystemClock.elapsedRealtime();
 //        long systemClockElapsedRealtimeNanosMinus = systemClockElapsedRealtimeNanos - systemClockElapsedRealtime * 1000000;
@@ -297,7 +309,7 @@ public class SensorsLoggerEngine extends Thread implements SensorEventListener, 
             }
             alkaidSensorTriggerCounter++;
 
-            if (callbackTriggerCounter >= 20) {
+            if (callbackTriggerCounter >= 100) {
 
                 if (sensorsCollectionListener != null) {
                     sensorsCollectionListener.onSensorsCollectionUpdated(sensorsCollection);
