@@ -168,7 +168,7 @@ public class FileUtil {
             stringBuilder.append(", ").append(gnssClock.getLeapSecond());
             stringBuilder.append(", ").append(gnssClock.getDriftNanosPerSecond());
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                stringBuilder.append(", ").append(gnssClock.getElapsedRealtimeUncertaintyNanos());
+                stringBuilder.append(", ").append(gnssClock.getDriftUncertaintyNanosPerSecond());
             } else {
                 stringBuilder.append(", ").append("");
             }
