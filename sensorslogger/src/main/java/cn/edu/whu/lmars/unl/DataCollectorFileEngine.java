@@ -37,6 +37,8 @@ public class DataCollectorFileEngine extends Thread {
     private FileOutputStream sensorAccelerometerUncalibratedFileOutputStream = null;
     private FileOutputStream sensorMagneticFieldFileOutputStream = null;
     private FileOutputStream sensorMagneticFieldUncalibratedFileOutputStream = null;
+    private FileOutputStream sensorGameRotationVectorFileOutputStream = null;
+    private FileOutputStream sensorPressureFileOutputStream = null;
     private FileOutputStream sensorGnssLocationFileOutputStream = null;
     private FileOutputStream sensorGnssMeasurementFileOutputStream = null;
 
@@ -58,6 +60,8 @@ public class DataCollectorFileEngine extends Thread {
             sensorAccelerometerUncalibratedFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "MotionSensorAccelerometerUncalibrated", ".csv");
             sensorMagneticFieldFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "PositionSensorMagneticField", ".csv");
             sensorMagneticFieldUncalibratedFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "PositionSensorMagneticFieldUncalibrated", ".csv");
+            sensorGameRotationVectorFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "PositionSensorGameRotationVector", ".csv");
+            sensorPressureFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "EnvironmentSensorPressure", ".csv");
             sensorGnssLocationFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "GnssLocation", ".csv");
             sensorGnssMeasurementFileOutputStream = initialSensorFileOutputStream(mainActivity, loggerFolderName, "GnssMeasurement", ".csv");
         } catch (Exception e) {
@@ -199,6 +203,12 @@ public class DataCollectorFileEngine extends Thread {
                 break;
             case Sensor.TYPE_MAGNETIC_FIELD_UNCALIBRATED:
                 FileUtil.writeSensorEvent(sensorMagneticFieldUncalibratedFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockOffsetNanos, sensorEvent);
+                break;
+            case Sensor.TYPE_GAME_ROTATION_VECTOR:
+                FileUtil.writeSensorEvent(sensorGameRotationVectorFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockOffsetNanos, sensorEvent);
+                break;
+            case Sensor.TYPE_PRESSURE:
+                FileUtil.writeSensorEvent(sensorPressureFileOutputStream, systemCurrentTimeMillis, systemClockElapsedRealtimeNanos, localGnssClockOffsetNanos, sensorEvent);
                 break;
             default:
                 break;
