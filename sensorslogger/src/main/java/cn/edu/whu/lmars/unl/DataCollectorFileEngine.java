@@ -93,7 +93,6 @@ public class DataCollectorFileEngine extends Thread {
             stringBuilder.append("\n");
             stringBuilder.append(Build.MANUFACTURER);
             stringBuilder.append(", ").append(Build.MODEL);
-            stringBuilder.append(", ").append(Build.MODEL);
             stringBuilder.append(", ").append(Build.VERSION.RELEASE);
             stringBuilder.append(", ").append(Build.VERSION.SDK_INT);
             deviceDataFileOutputStream.write(stringBuilder.toString().getBytes());
