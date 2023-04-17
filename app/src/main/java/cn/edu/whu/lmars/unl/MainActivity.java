@@ -419,10 +419,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void updatePressureSensor(PressureSensor pressureSensor) {
-        runOnUiThread(() -> {
-            pressureSensorTimestampTextView.setText(String.valueOf(pressureSensor.sensorEventTimestamp));
-            pressureSensorGeomagneticFieldStrengthXTextView.setText(String.valueOf(pressureSensor.values[0]));
-        });
+        if (pressureSensorTimestampTextView != null) {
+            runOnUiThread(() -> {
+                pressureSensorTimestampTextView.setText(String.valueOf(pressureSensor.sensorEventTimestamp));
+                pressureSensorGeomagneticFieldStrengthXTextView.setText(String.valueOf(pressureSensor.values[0]));
+            });
+        }
     }
 
     void initGnssSensorCard() {
